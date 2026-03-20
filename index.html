@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profes Particulares | CDI UAndes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --navy-dark: #1b2a4a;
+            --navy-mid: #3d5a80;
+            --steel: #8dabc4;
+            --steel-light: #b0c7da;
+            --bg: #f4f6f9;
+            --card-bg: #ffffff;
+            --text: #1b2a4a;
+            --text-muted: #5a7394;
+            --gold: #f0a500;
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            overflow-x: hidden;
+        }
+
+        /* Background */
+        .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; overflow: hidden; pointer-events: none; }
+        .bg-animation .circle { position: absolute; border-radius: 50%; opacity: 0.06; animation: float 20s infinite ease-in-out; }
+        .bg-animation .circle:nth-child(1) { width: 600px; height: 600px; background: var(--navy-dark); top: -200px; left: -100px; }
+        .bg-animation .circle:nth-child(2) { width: 400px; height: 400px; background: var(--navy-mid); top: 50%; right: -100px; animation-delay: -5s; }
+        .bg-animation .circle:nth-child(3) { width: 500px; height: 500px; background: var(--steel); bottom: -150px; left: 30%; animation-delay: -10s; }
+        @keyframes float {
+            0%, 100% { transform: translate(0, 0) scale(1); }
+            25% { transform: translate(30px, -30px) scale(1.05); }
+            50% { transform: translate(-20px, 20px) scale(0.95); }
+            75% { transform: translate(15px, 15px) scale(1.02); }
+        }
+
+        /* Nav */
+        nav {
+            position: fixed; top: 0; width: 100%; z-index: 100;
+            padding: 1rem 2rem; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(244, 246, 249, 0.85); backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(27, 42, 74, 0.08); transition: all 0.3s;
+        }
+        nav.scrolled { padding: 0.7rem 2rem; background: rgba(244, 246, 249, 0.95); box-shadow: 0 2px 20px rgba(27, 42, 74, 0.08); }
+        .logo { font-size: 1.3rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; color: var(--navy-dark); }
+        .logo-img { width: 36px; height: 36px; object-fit: contain; }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text-muted); text-decoration: none; font-size: 0.9rem; font-weight: 500; transition: color 0.3s; position: relative; }
+        .nav-links a::after { content: ''; position: absolute; bottom: -4px; left: 0; width: 0; height: 2px; background: var(--navy-dark); transition: width 0.3s; }
+        .nav-links a:hover { color: var(--text); }
+        .nav-links a:hover::after { width: 100%; }
+        .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; z-index: 101; }
+        .hamburger span { width: 25px; height: 2px; background: var(--text); transition: all 0.3s; }
+
+        /* Hero */
+        .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; z-index: 1; }
+        .hero-badge { display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(27, 42, 74, 0.08); border: 1px solid rgba(27, 42, 74, 0.15); padding: 0.5rem 1.2rem; border-radius: 50px; font-size: 0.85rem; color: var(--navy-mid); margin-bottom: 2rem; animation: fadeInUp 0.8s ease; }
+        .hero-badge .pulse { width: 8px; height: 8px; background: var(--navy-dark); border-radius: 50%; animation: pulse 2s infinite; }
+        @keyframes pulse { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: 0.5; transform: scale(1.5); } }
+        .hero h1 { font-size: clamp(2.5rem, 6vw, 4.5rem); font-weight: 900; line-height: 1.1; margin-bottom: 1.5rem; animation: fadeInUp 0.8s ease 0.1s both; }
+        .hero h1 .highlight { background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid), var(--steel)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 550px; line-height: 1.7; margin-bottom: 2.5rem; animation: fadeInUp 0.8s ease 0.2s both; }
+        .hero-buttons { display: flex; gap: 1rem; animation: fadeInUp 0.8s ease 0.3s both; }
+        .btn { padding: 0.85rem 2rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.3s; border: none; font-family: 'Inter', sans-serif; }
+        .btn-primary { background: var(--navy-dark); color: white; box-shadow: 0 4px 20px rgba(27, 42, 74, 0.3); }
+        .btn-primary:hover { background: var(--navy-mid); transform: translateY(-2px); box-shadow: 0 6px 25px rgba(27, 42, 74, 0.4); }
+        .btn-secondary { background: white; color: var(--navy-dark); border: 1px solid rgba(27, 42, 74, 0.15); }
+        .btn-secondary:hover { background: var(--steel-light); transform: translateY(-2px); }
+        .scroll-indicator { position: absolute; bottom: 2rem; animation: bounce 2s infinite; }
+        .scroll-indicator svg { width: 24px; height: 24px; color: var(--text-muted); }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(10px); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Stats */
+        .stats { display: flex; justify-content: center; gap: 4rem; padding: 3rem 2rem; position: relative; z-index: 1; }
+        .stat { text-align: center; }
+        .stat-number { font-size: 2.5rem; font-weight: 900; background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+        .stat-label { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem; }
+
+        /* Section */
+        section { position: relative; z-index: 1; padding: 5rem 2rem; }
+        .section-header { text-align: center; margin-bottom: 3.5rem; }
+        .section-header h2 { font-size: 2.2rem; font-weight: 800; margin-bottom: 0.8rem; }
+        .section-header p { color: var(--text-muted); font-size: 1.05rem; max-width: 500px; margin: 0 auto; }
+
+        /* Search & Filters */
+        .search-container { max-width: 500px; margin: 0 auto 1.5rem; position: relative; }
+        .search-container input { width: 100%; padding: 1rem 1.5rem 1rem 3rem; border-radius: 16px; border: 1px solid rgba(27, 42, 74, 0.12); background: white; color: var(--text); font-size: 0.95rem; font-family: 'Inter', sans-serif; outline: none; transition: all 0.3s; box-shadow: 0 2px 10px rgba(27, 42, 74, 0.06); }
+        .search-container input:focus { border-color: var(--navy-mid); box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.1); }
+        .search-container input::placeholder { color: var(--text-muted); }
+        .search-container svg { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-muted); width: 20px; height: 20px; }
+
+        /* Filter row */
+        .filter-row { max-width: 1200px; margin: 0 auto 1rem; padding: 0 1rem; display: flex; gap: 1rem; flex-wrap: wrap; align-items: end; justify-content: center; }
+        .filter-group { display: flex; flex-direction: column; gap: 0.4rem; }
+        .filter-group label { font-size: 0.75rem; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+        .filter-group select {
+            padding: 0.6rem 2rem 0.6rem 0.8rem; border-radius: 10px; border: 1px solid rgba(27, 42, 74, 0.12);
+            background: white; color: var(--text); font-size: 0.85rem; font-family: 'Inter', sans-serif;
+            outline: none; cursor: pointer; appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%235a7394' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat; background-position: right 0.6rem center;
+        }
+        .filter-group select:focus { border-color: var(--navy-mid); box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.1); }
+
+        .filters { display: flex; justify-content: center; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap; padding: 0 1rem; }
+        .filter-btn { padding: 0.5rem 1.2rem; border-radius: 50px; border: 1px solid rgba(27, 42, 74, 0.12); background: white; color: var(--text-muted); font-size: 0.8rem; font-weight: 500; cursor: pointer; transition: all 0.3s; font-family: 'Inter', sans-serif; }
+        .filter-btn:hover, .filter-btn.active { background: var(--navy-dark); border-color: var(--navy-dark); color: white; }
+
+        /* Cards */
+        .cards-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(360px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+        .card {
+            background: var(--card-bg); border-radius: 20px; padding: 1.8rem;
+            border: 1px solid rgba(27, 42, 74, 0.08); box-shadow: 0 2px 12px rgba(27, 42, 74, 0.06);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); cursor: pointer; position: relative; overflow: hidden;
+        }
+        .card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: linear-gradient(90deg, var(--navy-dark), var(--steel)); opacity: 0; transition: opacity 0.3s; }
+        .card:hover { transform: translateY(-8px); border-color: rgba(27, 42, 74, 0.15); box-shadow: 0 20px 40px rgba(27, 42, 74, 0.12); }
+        .card:hover::before { opacity: 1; }
+        .card-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
+        .avatar { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: white; flex-shrink: 0; }
+        .card-info h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
+        .card-info .career { font-size: 0.8rem; color: var(--text-muted); }
+        .card-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+        .card-subjects { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.2rem; }
+        .subject-tag { padding: 0.3rem 0.7rem; border-radius: 8px; font-size: 0.72rem; font-weight: 500; background: rgba(27, 42, 74, 0.05); color: var(--text-muted); border: 1px solid rgba(27, 42, 74, 0.08); }
+        .card-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid rgba(27, 42, 74, 0.08); }
+        .rating { display: flex; align-items: center; gap: 0.3rem; font-size: 0.9rem; font-weight: 600; }
+        .stars { display: flex; gap: 2px; }
+        .stars svg { width: 14px; height: 14px; }
+        .star-filled { color: var(--gold); fill: var(--gold); }
+        .star-empty { color: #ddd; fill: #ddd; }
+        .star-half { color: var(--gold); fill: url(#half-star-grad); }
+        .price { font-size: 0.95rem; font-weight: 700; color: var(--navy-mid); }
+        .no-results { text-align: center; padding: 4rem 2rem; color: var(--text-muted); display: none; }
+        .no-results svg { width: 64px; height: 64px; margin-bottom: 1rem; opacity: 0.3; }
+
+        /* Steps */
+        .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
+        .step { text-align: center; padding: 2.5rem 2rem; border-radius: 20px; background: white; border: 1px solid rgba(27, 42, 74, 0.08); box-shadow: 0 2px 12px rgba(27, 42, 74, 0.06); transition: all 0.3s; }
+        .step:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(27, 42, 74, 0.1); }
+        .step-icon { width: 64px; height: 64px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin: 0 auto 1.2rem; font-size: 1.8rem; }
+        .step h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.5rem; }
+        .step p { color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+
+        /* CTA */
+        .cta-section { text-align: center; padding: 5rem 2rem; }
+        .cta-box { max-width: 600px; margin: 0 auto; padding: 3.5rem; border-radius: 24px; background: linear-gradient(135deg, rgba(27, 42, 74, 0.05), rgba(141, 171, 196, 0.15)); border: 1px solid rgba(27, 42, 74, 0.1); }
+        .cta-box h2 { font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
+        .cta-box p { color: var(--text-muted); margin-bottom: 2rem; line-height: 1.6; }
+
+        /* Footer */
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid rgba(27, 42, 74, 0.08); position: relative; z-index: 1; background: white; }
+        footer p { color: var(--text-muted); font-size: 0.85rem; }
+        footer .footer-brand { font-weight: 700; color: var(--navy-dark); font-size: 1rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
+        .footer-logo { width: 28px; height: 28px; object-fit: contain; }
+
+        /* Modal */
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(27, 42, 74, 0.5); backdrop-filter: blur(8px); z-index: 200; justify-content: center; align-items: center; padding: 2rem; }
+        .modal-overlay.active { display: flex; }
+        .modal { background: white; border-radius: 24px; padding: 2.5rem; max-width: 520px; width: 100%; border: 1px solid rgba(27, 42, 74, 0.1); box-shadow: 0 20px 60px rgba(27, 42, 74, 0.2); position: relative; animation: modalIn 0.3s ease; max-height: 90vh; overflow-y: auto; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-close { position: absolute; top: 1rem; right: 1rem; background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 1.5rem; padding: 0.5rem; line-height: 1; }
+        .modal-avatar { width: 72px; height: 72px; border-radius: 18px; display: flex; align-items: center; justify-content: center; font-size: 2rem; font-weight: 800; color: white; margin-bottom: 1.2rem; }
+        .modal h3 { font-size: 1.4rem; font-weight: 800; margin-bottom: 0.3rem; }
+        .modal .modal-career { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 0.8rem; }
+        .modal .modal-desc { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.2rem; padding-bottom: 1.2rem; border-bottom: 1px solid rgba(27, 42, 74, 0.08); }
+        .modal .modal-detail { display: flex; align-items: center; gap: 0.8rem; padding: 0.7rem 0; font-size: 0.9rem; }
+        .modal .modal-detail svg { width: 20px; height: 20px; color: var(--navy-mid); flex-shrink: 0; }
+        .modal .modal-stars { display: flex; align-items: center; gap: 0.5rem; }
+        .modal .modal-stars .stars { display: flex; gap: 2px; }
+        .modal .modal-stars .stars svg { width: 18px; height: 18px; }
+        .modal .modal-subjects { display: flex; flex-wrap: wrap; gap: 0.4rem; margin: 1rem 0 1.5rem; }
+        .modal .whatsapp-btn {
+            display: flex; align-items: center; justify-content: center; gap: 0.5rem;
+            width: 100%; padding: 1rem; border-radius: 14px; background: #25d366; color: white;
+            border: none; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s;
+            font-family: 'Inter', sans-serif; text-decoration: none;
+        }
+        .modal .whatsapp-btn:hover { background: #20bd5a; transform: translateY(-2px); }
+
+        /* Rating modal stars */
+        .rating-section { margin: 1.5rem 0; padding: 1.2rem; background: rgba(27, 42, 74, 0.03); border-radius: 14px; }
+        .rating-section h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.8rem; color: var(--text-muted); }
+        .rate-stars { display: flex; gap: 4px; cursor: pointer; }
+        .rate-stars svg { width: 28px; height: 28px; color: #ddd; fill: #ddd; transition: all 0.2s; cursor: pointer; }
+        .rate-stars svg:hover, .rate-stars svg.active { color: var(--gold); fill: var(--gold); transform: scale(1.15); }
+        .rate-msg { font-size: 0.8rem; color: var(--navy-mid); margin-top: 0.5rem; display: none; font-weight: 500; }
+
+        /* Form modal */
+        .form-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(27, 42, 74, 0.5); backdrop-filter: blur(8px); z-index: 300; justify-content: center; align-items: center; padding: 2rem; }
+        .form-overlay.active { display: flex; }
+        .form-modal { background: white; border-radius: 24px; padding: 2.5rem; max-width: 560px; width: 100%; box-shadow: 0 20px 60px rgba(27, 42, 74, 0.2); position: relative; animation: modalIn 0.3s ease; max-height: 90vh; overflow-y: auto; }
+        .form-modal h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
+        .form-modal .form-sub { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
+        .form-group { margin-bottom: 1.2rem; }
+        .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; }
+        .form-group input, .form-group select, .form-group textarea {
+            width: 100%; padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid rgba(27, 42, 74, 0.12);
+            background: var(--bg); color: var(--text); font-size: 0.9rem; font-family: 'Inter', sans-serif; outline: none; transition: all 0.3s;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--navy-mid); box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.1); }
+        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-check { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .form-check label { display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid rgba(27, 42, 74, 0.12); background: var(--bg); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
+        .form-check label:has(input:checked) { background: var(--navy-dark); color: white; border-color: var(--navy-dark); }
+        .form-check input { display: none; }
+        .form-success { display: none; text-align: center; padding: 2rem 0; }
+        .form-success svg { width: 64px; height: 64px; color: #25d366; margin-bottom: 1rem; }
+        .form-success h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
+        .form-success p { color: var(--text-muted); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); flex-direction: column; justify-content: center; align-items: center; gap: 2rem; }
+            .nav-links.open { display: flex; }
+            .nav-links a { font-size: 1.3rem; }
+            .hamburger { display: flex; }
+            .stats { gap: 2rem; flex-wrap: wrap; }
+            .cards-grid { grid-template-columns: 1fr; }
+            .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; }
+            .btn { text-align: center; }
+            .filter-row { flex-direction: column; align-items: stretch; }
+        }
+
+        .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+    </style>
+</head>
+<body>
+
+    <!-- SVG defs for half stars -->
+    <svg width="0" height="0" style="position:absolute">
+        <defs>
+            <linearGradient id="half-star-grad">
+                <stop offset="50%" stop-color="#f0a500"/>
+                <stop offset="50%" stop-color="#ddd"/>
+            </linearGradient>
+        </defs>
+    </svg>
+
+    <div class="bg-animation"><div class="circle"></div><div class="circle"></div><div class="circle"></div></div>
+
+    <!-- Nav -->
+    <nav>
+        <div class="logo"><img src="CDI.png.webp" alt="CDI UAndes" class="logo-img"> CDI UAndes</div>
+        <ul class="nav-links" id="navLinks">
+            <li><a href="#profesores" onclick="closeNav()">Profesores</a></li>
+            <li><a href="#como-funciona" onclick="closeNav()">Cómo Funciona</a></li>
+            <li><a href="#" onclick="closeNav();openForm()" style="cursor:pointer">Sé Profe</a></li>
+        </ul>
+        <div class="hamburger" id="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge"><div class="pulse"></div>Plataforma oficial CDI UAndes</div>
+        <h1>Encuentra tu<br><span class="highlight">profe particular</span></h1>
+        <p>Conectamos alumnos de la UAndes con los mejores profes particulares. Aprueba tus ramos con ayuda de quienes ya los pasaron.</p>
+        <div class="hero-buttons">
+            <a href="#profesores" class="btn btn-primary">Ver Profesores</a>
+            <a href="#" class="btn btn-secondary" onclick="openForm()">Quiero ser profe</a>
+        </div>
+        <div class="scroll-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg></div>
+    </section>
+
+    <!-- Stats -->
+    <div class="stats reveal">
+        <div class="stat"><div class="stat-number" id="statProfes">0</div><div class="stat-label">Profes disponibles</div></div>
+        <div class="stat"><div class="stat-number" id="statRamos">0</div><div class="stat-label">Ramos cubiertos</div></div>
+        <div class="stat"><div class="stat-number" id="statAlumnos">0</div><div class="stat-label">Alumnos ayudados</div></div>
+    </div>
+
+    <!-- Profesores -->
+    <section id="profesores">
+        <div class="section-header reveal">
+            <h2>Nuestros Profes</h2>
+            <p>Todos son alumnos o egresados de la UAndes</p>
+        </div>
+
+        <div class="search-container reveal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            <input type="text" id="searchInput" placeholder="Buscar por nombre, ramo o carrera...">
+        </div>
+
+        <div class="filter-row reveal">
+            <div class="filter-group">
+                <label>Carrera</label>
+                <select id="filterCarrera">
+                    <option value="all">Todas</option>
+                    <option value="Plan Común">Plan Común</option>
+                    <option value="ICI">Ing. Civil Industrial (ICI)</option>
+                    <option value="IOC">Ing. Civil en Obras Civiles (IOC)</option>
+                    <option value="ICE">Ing. Civil Eléctrica (ICE)</option>
+                    <option value="ICC">Ing. Civil en Computación (ICC)</option>
+                    <option value="ICA">Ing. Civil Ambiental (ICA)</option>
+                    <option value="ICQ">Ing. Civil Química (ICQ)</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Ramo</label>
+                <select id="filterRamo">
+                    <option value="all">Todos los ramos</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Semestre</label>
+                <select id="filterSemestre">
+                    <option value="all">Todos</option>
+                    <option value="1">1er Semestre</option>
+                    <option value="2">2do Semestre</option>
+                    <option value="3">3er Semestre</option>
+                    <option value="4">4to Semestre</option>
+                    <option value="5">5to Semestre</option>
+                    <option value="6">6to Semestre</option>
+                    <option value="7">7mo Semestre</option>
+                    <option value="8">8vo Semestre</option>
+                    <option value="9">9no Semestre</option>
+                    <option value="10">10mo Semestre</option>
+                    <option value="11">11vo Semestre</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="cards-grid" id="cardsGrid"></div>
+        <div class="no-results" id="noResults">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            <p>No se encontraron profesores con esa búsqueda.</p>
+        </div>
+    </section>
+
+    <!-- Como Funciona -->
+    <section id="como-funciona">
+        <div class="section-header reveal"><h2>Cómo Funciona</h2><p>En 3 simples pasos</p></div>
+        <div class="steps reveal">
+            <div class="step">
+                <div class="step-icon" style="background: rgba(27, 42, 74, 0.08);">🔍</div>
+                <h3>Busca tu ramo</h3>
+                <p>Filtra por carrera, semestre o busca directamente el ramo que necesitas reforzar.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon" style="background: rgba(61, 90, 128, 0.08);">💬</div>
+                <h3>Contacta al profe</h3>
+                <p>Escríbele por WhatsApp para coordinar horarios y modalidad de clases.</p>
+            </div>
+            <div class="step">
+                <div class="step-icon" style="background: rgba(141, 171, 196, 0.15);">🚀</div>
+                <h3>Aprende y aprueba</h3>
+                <p>Clases personalizadas que se adaptan a tu ritmo. Al final, califica a tu profe.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="cta-section" id="unete">
+        <div class="cta-box reveal">
+            <h2>¿Quieres ser profe?</h2>
+            <p>Si eres alumno o egresado de la UAndes y quieres compartir tus conocimientos (y ganar algo extra), únete a nuestra red de profes particulares.</p>
+            <a href="#" class="btn btn-primary" onclick="openForm()">Postular como Profe</a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-brand"><img src="CDI.png.webp" alt="CDI" class="footer-logo"> CDI UAndes</div>
+        <p>Centro de Alumnos de Ingeniería — Universidad de los Andes</p>
+        <p style="margin-top: 0.5rem;">Hecho con ❤️ por el CDI UAndes &copy; 2026</p>
+    </footer>
+
+    <!-- Modal Profe -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal" id="modal">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-avatar" id="modalAvatar"></div>
+            <h3 id="modalName"></h3>
+            <p class="modal-career" id="modalCareer"></p>
+            <p class="modal-desc" id="modalDesc"></p>
+
+            <div class="modal-detail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                <div class="modal-stars">
+                    <div class="stars" id="modalStarsDisplay"></div>
+                    <span id="modalRatingText"></span>
+                </div>
+            </div>
+            <div class="modal-detail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 00-8 0v2"/></svg>
+                <span id="modalPrice"></span>
+            </div>
+            <div class="modal-detail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 1118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                <span id="modalModality"></span>
+            </div>
+            <div class="modal-detail">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c0 2 3 3 6 3s6-1 6-3v-5"/></svg>
+                <span id="modalExp"></span>
+            </div>
+
+            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 1rem; font-weight: 600;">Ramos que enseña:</p>
+            <div class="modal-subjects" id="modalSubjects"></div>
+
+            <!-- Rating section -->
+            <div class="rating-section">
+                <h4>Califica a este profe</h4>
+                <div class="rate-stars" id="rateStars">
+                    <svg viewBox="0 0 24 24" data-star="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg viewBox="0 0 24 24" data-star="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg viewBox="0 0 24 24" data-star="3"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg viewBox="0 0 24 24" data-star="4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                    <svg viewBox="0 0 24 24" data-star="5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                </div>
+                <p class="rate-msg" id="rateMsg">¡Gracias por tu calificación!</p>
+            </div>
+
+            <a id="modalWhatsapp" href="#" target="_blank" class="whatsapp-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                Contactar por WhatsApp
+            </a>
+        </div>
+    </div>
+
+    <!-- Form Modal - Postular como Profe -->
+    <div class="form-overlay" id="formOverlay">
+        <div class="form-modal">
+            <button class="modal-close" onclick="closeForm()">&times;</button>
+            <div id="formContent">
+                <h2>Postula como Profe</h2>
+                <p class="form-sub">Completa tus datos y te agregaremos a la plataforma.</p>
+                <form id="profeForm" onsubmit="submitForm(event)">
+                    <div class="form-group">
+                        <label>Nombre completo *</label>
+                        <input type="text" id="fNombre" required placeholder="Ej: Martín González">
+                    </div>
+                    <div class="form-group">
+                        <label>Carrera *</label>
+                        <select id="fCarrera" required>
+                            <option value="">Selecciona tu carrera</option>
+                            <option value="Ing. Civil Industrial">Ing. Civil Industrial (ICI)</option>
+                            <option value="Ing. Civil en Obras Civiles">Ing. Civil en Obras Civiles (IOC)</option>
+                            <option value="Ing. Civil Eléctrica">Ing. Civil Eléctrica (ICE)</option>
+                            <option value="Ing. Civil en Computación">Ing. Civil en Computación (ICC)</option>
+                            <option value="Ing. Civil Ambiental">Ing. Civil Ambiental (ICA)</option>
+                            <option value="Ing. Civil Química">Ing. Civil Química (ICQ)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>WhatsApp (con código de país, ej: 56912345678) *</label>
+                        <input type="tel" id="fWhatsapp" required placeholder="56912345678">
+                    </div>
+                    <div class="form-group">
+                        <label>Precio por hora (CLP) *</label>
+                        <input type="text" id="fPrecio" required placeholder="Ej: $12.000/hr">
+                    </div>
+                    <div class="form-group">
+                        <label>Modalidad *</label>
+                        <select id="fModalidad" required>
+                            <option value="">Selecciona</option>
+                            <option value="Presencial y Online">Presencial y Online</option>
+                            <option value="Presencial">Solo Presencial</option>
+                            <option value="Online">Solo Online</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción breve sobre ti *</label>
+                        <textarea id="fDesc" required placeholder="Ej: Alumno de 5to año, he sido ayudante de Cálculo I y II por 3 semestres..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Experiencia / Semestre actual *</label>
+                        <input type="text" id="fExp" required placeholder="Ej: 8vo semestre, ayudante de Cálculo I">
+                    </div>
+                    <div class="form-group">
+                        <label>Ramos que puedes enseñar *</label>
+                        <div class="form-check" id="fRamos"></div>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;">Enviar Postulación</button>
+                </form>
+            </div>
+            <div class="form-success" id="formSuccess">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                <h3>¡Postulación enviada!</h3>
+                <p>Te contactaremos pronto para agregarte a la plataforma.</p>
+            </div>
+        </div>
+    </div>
+
+<script>
+// ==========================================
+//   MALLA CURRICULAR (del Excel)
+// ==========================================
+const mallaCursos = [
+    {codigo:"ING1400",titulo:"Bases para el Estudio de Ingeniería",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:1},
+    {codigo:"ING1107",titulo:"Introducción al Álgebra y Geometría",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:1},
+    {codigo:"ING1108",titulo:"Introducción al Cálculo",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:1},
+    {codigo:"ING1103",titulo:"Programación",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:1},
+    {codigo:"ING1102",titulo:"Fundamentos de Química",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:1},
+    {codigo:"ING1106",titulo:"Antropología Filosófica",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:1},
+    {codigo:"ING1105",titulo:"Taller de Proyectos de Ingeniería",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:1},
+    {codigo:"FRM1100",titulo:"Teología I",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:1},
+    {codigo:"ING1205",titulo:"Álgebra Lineal",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:2},
+    {codigo:"ING1206",titulo:"Cálculo I",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:2},
+    {codigo:"ING1207",titulo:"Introducción a la Mecánica",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:2},
+    {codigo:"ING1208",titulo:"Fundamentos de Economía",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:2},
+    {codigo:"FRM2100",titulo:"Teología II",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:2},
+    {codigo:"ING6100",titulo:"Requisito Inglés ALTE 3",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:0},
+    {codigo:"ING2102",titulo:"Cálculo II",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:3},
+    {codigo:"ING2101",titulo:"Ecuaciones Diferenciales",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:3},
+    {codigo:"ING2105",titulo:"Mecánica y Ondas",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:3},
+    {codigo:"ING2106",titulo:"Teoría de Probabilidades",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:3},
+    {codigo:"ING2202",titulo:"Electricidad y Magnetismo",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:4},
+    {codigo:"ING2206",titulo:"Estadística Aplicada",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:4},
+    {codigo:"ING2204",titulo:"Estática",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:4},
+    {codigo:"ING2207",titulo:"Termodinámica",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:4},
+    {codigo:"ING3104",titulo:"Ética",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:4},
+    {codigo:"ING4105",titulo:"Filosofía de las Ciencias",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:5},
+    {codigo:"ICI3101",titulo:"Optimización",carreras:["ICI","IOC"],semestre:5},
+    {codigo:"ICI3103",titulo:"Métodos Estadísticos para la Gestión",carreras:["ICI"],semestre:5},
+    {codigo:"ICI3130",titulo:"Contabilidad y Estados Financieros",carreras:["ICI"],semestre:5},
+    {codigo:"IOC3101",titulo:"Mecánica de Materiales",carreras:["IOC"],semestre:5},
+    {codigo:"IOC3103",titulo:"Métodos Numéricos (IOC, ICA, ICQ)",carreras:["IOC","ICA","ICQ"],semestre:5},
+    {codigo:"ICE3104",titulo:"Análisis de Circuitos",carreras:["ICE"],semestre:5},
+    {codigo:"ICE3105",titulo:"Señales y Sistemas",carreras:["ICE"],semestre:5},
+    {codigo:"ICE3106",titulo:"Sistemas Digitales",carreras:["ICE"],semestre:5},
+    {codigo:"ICC3100",titulo:"Paradigmas de Programación",carreras:["ICC"],semestre:5},
+    {codigo:"ICC3102",titulo:"Programación de Bajo Nivel",carreras:["ICC"],semestre:5},
+    {codigo:"ICC3204",titulo:"Bases de Datos",carreras:["ICC","ICI"],semestre:5},
+    {codigo:"ICA3102",titulo:"Termotecnia",carreras:["ICA"],semestre:5},
+    {codigo:"ICA3104",titulo:"Microbiología Industrial y Ambiental",carreras:["ICA"],semestre:5},
+    {codigo:"ICQ3101",titulo:"Balances de Materia y Energía",carreras:["ICQ"],semestre:5},
+    {codigo:"ICQ3102",titulo:"Termodinámica Aplicada",carreras:["ICQ"],semestre:5},
+    {codigo:"ICI3204",titulo:"Microeconomía",carreras:["ICI"],semestre:6},
+    {codigo:"ICI3205",titulo:"Modelos Estocásticos",carreras:["ICI"],semestre:6},
+    {codigo:"ICI3206",titulo:"Programación Matemática",carreras:["ICI"],semestre:6},
+    {codigo:"IOC3201",titulo:"Análisis Estructural",carreras:["IOC"],semestre:6},
+    {codigo:"IOC3203",titulo:"Fluid Mechanics",carreras:["IOC","ICA","ICQ"],semestre:6},
+    {codigo:"IOC3220",titulo:"Topografía Aplicada",carreras:["IOC"],semestre:6},
+    {codigo:"IOC4102",titulo:"Materiales de Construcción",carreras:["IOC"],semestre:6},
+    {codigo:"ICE3201",titulo:"Sistemas Electrónicos",carreras:["ICE"],semestre:6},
+    {codigo:"ICE3202",titulo:"Procesamiento de Señales",carreras:["ICE"],semestre:6},
+    {codigo:"ICE3203",titulo:"Optical Systems",carreras:["ICE"],semestre:6},
+    {codigo:"ICE3206",titulo:"Diseño de Sistemas Embebidos",carreras:["ICE"],semestre:6},
+    {codigo:"ICC3201",titulo:"Sistemas Operativos y Redes",carreras:["ICC"],semestre:6},
+    {codigo:"ICC3202",titulo:"Arquitectura de Computadores",carreras:["ICC"],semestre:6},
+    {codigo:"ICC3203",titulo:"Estructuras de Datos y Algoritmos",carreras:["ICC"],semestre:6},
+    {codigo:"ICC4167",titulo:"Web Technologies",carreras:["ICC"],semestre:6},
+    {codigo:"ICA3130",titulo:"Ecología, Medio Ambiente y Energía",carreras:["ICA"],semestre:6},
+    {codigo:"ICA3220",titulo:"Transferencia de Calor",carreras:["ICA"],semestre:6},
+    {codigo:"ICA3210",titulo:"Transferencia de Masa",carreras:["ICA"],semestre:6},
+    {codigo:"ICQ3201",titulo:"Ecología, Medio Ambiente y Energía",carreras:["ICQ"],semestre:6},
+    {codigo:"ICQ3202",titulo:"Transferencia de Calor",carreras:["ICQ"],semestre:6},
+    {codigo:"ICQ3203",titulo:"Transferencia de Masa",carreras:["ICQ"],semestre:6},
+    {codigo:"ING4140",titulo:"Pensamiento de Diseño Aplicado a Ingeniería",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:7},
+    {codigo:"ING4106",titulo:"Pre-Professional Practice",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:7},
+    {codigo:"ICI4110",titulo:"Econometría",carreras:["ICI"],semestre:7},
+    {codigo:"ICI4120",titulo:"Finanzas I",carreras:["ICI"],semestre:7},
+    {codigo:"ICI4202",titulo:"Simulación",carreras:["ICI"],semestre:7},
+    {codigo:"IOC3204",titulo:"Introducción a la Geomecánica",carreras:["IOC"],semestre:7},
+    {codigo:"IOC4101",titulo:"Hormigón Armado",carreras:["IOC"],semestre:7},
+    {codigo:"IOC4103",titulo:"Hidráulica",carreras:["IOC","ICA"],semestre:7},
+    {codigo:"ICE4105",titulo:"Sistemas Electrónicos Avanzados",carreras:["ICE"],semestre:7},
+    {codigo:"ICE4106",titulo:"Introducción a las Comunicaciones",carreras:["ICE"],semestre:7},
+    {codigo:"ICE4104",titulo:"Conversión de Energía",carreras:["ICE"],semestre:7},
+    {codigo:"ICC4101",titulo:"Algorithms and Competitive Programming",carreras:["ICC"],semestre:7},
+    {codigo:"ICC4104",titulo:"Fundamentos de Ciberseguridad",carreras:["ICC"],semestre:7},
+    {codigo:"ICA4120",titulo:"Máquinas de Transformación Física y Química",carreras:["ICA"],semestre:7},
+    {codigo:"ICA4130",titulo:"Balances de Materia y Energía",carreras:["ICA"],semestre:7},
+    {codigo:"ICQ4101",titulo:"Ingeniería Biológica",carreras:["ICQ"],semestre:7},
+    {codigo:"ICQ4102",titulo:"Microbiología Industrial",carreras:["ICQ"],semestre:7},
+    {codigo:"ICQ4103",titulo:"Química Inorgánica y Orgánica",carreras:["ICQ"],semestre:7},
+    {codigo:"ICI4203",titulo:"Macroeconomía",carreras:["ICI"],semestre:8},
+    {codigo:"ICI4210",titulo:"Diseño y Evaluación de Proyectos Industriales",carreras:["ICI"],semestre:8},
+    {codigo:"ICI4220",titulo:"Gestión de Operaciones",carreras:["ICI"],semestre:8},
+    {codigo:"ICI4230",titulo:"Finanzas II",carreras:["ICI"],semestre:8},
+    {codigo:"IOC4201",titulo:"Métodos Computacionales en Obras Civiles",carreras:["IOC"],semestre:8},
+    {codigo:"IOC4202",titulo:"Métodos y Técnicas de Construcción",carreras:["IOC"],semestre:8},
+    {codigo:"IOC4208",titulo:"Hidrología",carreras:["IOC","ICA"],semestre:8},
+    {codigo:"IOC4209",titulo:"Sistemas de Transporte",carreras:["IOC"],semestre:8},
+    {codigo:"ICE4203",titulo:"Potencia Eléctrica",carreras:["ICE"],semestre:8},
+    {codigo:"ICE4204",titulo:"Comunicaciones Digitales",carreras:["ICE"],semestre:8},
+    {codigo:"ICE4205",titulo:"Proyecto de Diseño Eléctrico",carreras:["ICE"],semestre:8},
+    {codigo:"ICE4206",titulo:"Control Automático",carreras:["ICE"],semestre:8},
+    {codigo:"ICC4203",titulo:"Aplicaciones Móviles",carreras:["ICC"],semestre:8},
+    {codigo:"ICC4204",titulo:"Introducción a la Ingeniería de Software",carreras:["ICC"],semestre:8},
+    {codigo:"ICC4205",titulo:"Proyecto Desarrollo de Software",carreras:["ICC"],semestre:8},
+    {codigo:"ICC4206",titulo:"Almacenamiento y Procesamiento Masivo de Datos",carreras:["ICC"],semestre:8},
+    {codigo:"ICA4110",titulo:"Cinética y Diseño de Reactores Químicos",carreras:["ICA"],semestre:8},
+    {codigo:"ICA4210",titulo:"Diseño y Optimización de Procesos Industriales",carreras:["ICA"],semestre:8},
+    {codigo:"ICA4230",titulo:"Ingeniería de Bioprocesos Ambientales",carreras:["ICA"],semestre:8},
+    {codigo:"ICQ4201",titulo:"Cinética y Diseño de Reactores Químicos",carreras:["ICQ"],semestre:8},
+    {codigo:"ICQ4202",titulo:"Ingeniería de Bioprocesos",carreras:["ICQ"],semestre:8},
+    {codigo:"ICQ4203",titulo:"Máquinas de Transformación",carreras:["ICQ"],semestre:8},
+    {codigo:"ICQ4204",titulo:"Process Design and Optimization",carreras:["ICQ"],semestre:8},
+    {codigo:"ICI5120",titulo:"Marketing",carreras:["ICI"],semestre:9},
+    {codigo:"ICI5130",titulo:"Logistics",carreras:["ICI"],semestre:9},
+    {codigo:"ICI5110",titulo:"Organización Industrial",carreras:["ICI"],semestre:9},
+    {codigo:"IOC5100",titulo:"Dynamics of Structures",carreras:["IOC"],semestre:9},
+    {codigo:"IOC5104",titulo:"Evaluación de Proyectos de Ingeniería",carreras:["IOC","ICA"],semestre:9},
+    {codigo:"IOC5120",titulo:"Diseño en Acero",carreras:["IOC"],semestre:9},
+    {codigo:"ICE5105",titulo:"Mercados Eléctricos",carreras:["ICE"],semestre:9},
+    {codigo:"ICE5106",titulo:"Sistemas de Potencia",carreras:["ICE"],semestre:9},
+    {codigo:"ICE5107",titulo:"Fundamentos de Energías Renovables",carreras:["ICE"],semestre:9},
+    {codigo:"ICC5106",titulo:"Inteligencia Artificial Aplicada",carreras:["ICC"],semestre:9},
+    {codigo:"ICC5107",titulo:"Sistemas Embebidos",carreras:["ICC"],semestre:9},
+    {codigo:"ICC5108",titulo:"Software Design",carreras:["ICC"],semestre:9},
+    {codigo:"ICC5120",titulo:"User Experience Design",carreras:["ICC"],semestre:9},
+    {codigo:"ICA5110",titulo:"Gestión Residuos Sólidos y Remediación de Suelos",carreras:["ICA"],semestre:9},
+    {codigo:"ICA5120",titulo:"Air Quality and Environmental Pollution",carreras:["ICA"],semestre:9},
+    {codigo:"ICA5130",titulo:"Legislación y Evaluación de Impacto Ambiental",carreras:["ICA"],semestre:9},
+    {codigo:"ICA5140",titulo:"Evaluación de Proyectos de Ingeniería Ambiental",carreras:["ICA"],semestre:9},
+    {codigo:"ICA5150",titulo:"Obras Civiles Sanitarias",carreras:["ICA"],semestre:9},
+    {codigo:"ICQ5101",titulo:"Dinámica y Control de Procesos",carreras:["ICQ"],semestre:9},
+    {codigo:"ICQ5102",titulo:"Diseño de Reactores Avanzados",carreras:["ICQ"],semestre:9},
+    {codigo:"ICQ5103",titulo:"Formulación y Evaluación de Proyectos",carreras:["ICQ"],semestre:9},
+    {codigo:"ICQ5104",titulo:"Laboratorio de Procesos",carreras:["ICQ"],semestre:9},
+    {codigo:"ING5203",titulo:"Proyecto de Título 1",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:10},
+    {codigo:"ICI5210",titulo:"Gestión Estratégica",carreras:["ICI"],semestre:10},
+    {codigo:"ICI5220",titulo:"Gestión de Personas y Desarrollo Organizacional",carreras:["ICI"],semestre:10},
+    {codigo:"IOC5203",titulo:"Tecnología del Hormigón",carreras:["IOC"],semestre:10},
+    {codigo:"IOC5204",titulo:"Diseño Sismorresistente",carreras:["IOC"],semestre:10},
+    {codigo:"ICE5102",titulo:"Redes de Comunicación",carreras:["ICE"],semestre:10},
+    {codigo:"ICE5205",titulo:"Proyecto Eléctrico",carreras:["ICE"],semestre:10},
+    {codigo:"ICC5203",titulo:"Gestión de Proyectos de Software",carreras:["ICC"],semestre:10},
+    {codigo:"ICC5204",titulo:"Software Architecture",carreras:["ICC"],semestre:10},
+    {codigo:"ICA5210",titulo:"Wastewater Treatment",carreras:["ICA"],semestre:10},
+    {codigo:"ICQ5201",titulo:"Gestión y Administración Industrial",carreras:["ICQ"],semestre:10},
+    {codigo:"ICQ5202",titulo:"Plant Design for Chemical Engineering",carreras:["ICQ"],semestre:10},
+    {codigo:"ING5206",titulo:"Seminario de Ética Profesional",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:10},
+    {codigo:"ING6104",titulo:"Professional Practice",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:11},
+    {codigo:"ING6103",titulo:"Proyecto de Título 2",carreras:["Plan Común","ICI","IOC","ICE","ICC","ICA","ICQ"],semestre:11},
+];
+
+// Build ramo list for filter dropdown
+const ramosUnicos = [...new Set(mallaCursos.map(c => c.titulo))].sort();
+
+const filterRamoSelect = document.getElementById('filterRamo');
+ramosUnicos.forEach(r => {
+    const opt = document.createElement('option');
+    opt.value = r;
+    opt.textContent = r;
+    filterRamoSelect.appendChild(opt);
+});
+
+// Also populate form checkboxes
+const popularRamos = mallaCursos.filter(c => c.semestre >= 1 && c.semestre <= 6).map(c => c.titulo);
+const uniquePopular = [...new Set(popularRamos)].sort();
+const fRamosContainer = document.getElementById('fRamos');
+ramosUnicos.forEach(r => {
+    const lbl = document.createElement('label');
+    lbl.innerHTML = `<input type="checkbox" name="ramos" value="${r}"> ${r}`;
+    fRamosContainer.appendChild(lbl);
+});
+
+// ==========================================
+//   PROFESORES DATA
+// ==========================================
+const avatarColors = ["#1b2a4a","#3d5a80","#5a7d9a","#8dabc4","#2c4266","#4a6fa5"];
+
+const profesores = [
+    {
+        nombre: "Martín González",
+        carrera: "Ing. Civil Industrial",
+        carrSigla: "ICI",
+        ramos: ["Cálculo I", "Cálculo II", "Álgebra Lineal"],
+        semestres: [2, 3],
+        rating: 4.9, reviews: 23, totalRating: 4.9*23, ratingCount: 23,
+        precio: "$15.000/hr",
+        modalidad: "Presencial y Online",
+        whatsapp: "56912345678",
+        descripcion: "Alumno de 9no semestre de ICI. He sido ayudante de Cálculo I por 3 semestres y de Álgebra Lineal por 2. Me apasiona enseñar matemáticas de forma clara y con muchos ejercicios prácticos.",
+        experiencia: "9no semestre · Ayudante de Cálculo I y Álgebra Lineal",
+        color: "#1b2a4a"
+    },
+    {
+        nombre: "Sofía Araya",
+        carrera: "Ing. Civil en Computación",
+        carrSigla: "ICC",
+        ramos: ["Programación", "Estructuras de Datos y Algoritmos", "Bases de Datos"],
+        semestres: [1, 5, 6],
+        rating: 5.0, reviews: 31, totalRating: 5.0*31, ratingCount: 31,
+        precio: "$12.000/hr",
+        modalidad: "Online",
+        whatsapp: "56912345678",
+        descripcion: "Apasionada por la programación y la computación. Enseño desde lo básico (Python/C) hasta estructuras de datos avanzadas. Mis clases son prácticas con ejercicios de programación en vivo.",
+        experiencia: "10mo semestre · Ayudante de Programación y EDA",
+        color: "#3d5a80"
+    },
+    {
+        nombre: "Diego Muñoz",
+        carrera: "Ing. Civil en Obras Civiles",
+        carrSigla: "IOC",
+        ramos: ["Introducción a la Mecánica", "Mecánica y Ondas", "Estática"],
+        semestres: [2, 3, 4],
+        rating: 4.8, reviews: 18, totalRating: 4.8*18, ratingCount: 18,
+        precio: "$13.000/hr",
+        modalidad: "Presencial",
+        whatsapp: "56912345678",
+        descripcion: "Especialista en física y mecánica. Mis clases se enfocan en entender los conceptos y aplicarlos a problemas reales. Uso muchos diagramas y ejemplos visuales.",
+        experiencia: "8vo semestre · Mejor promedio en Estática 2024",
+        color: "#5a7d9a"
+    },
+    {
+        nombre: "Catalina Rojas",
+        carrera: "Ing. Civil Industrial",
+        carrSigla: "ICI",
+        ramos: ["Microeconomía", "Macroeconomía", "Fundamentos de Economía"],
+        semestres: [2, 6, 8],
+        rating: 4.7, reviews: 15, totalRating: 4.7*15, ratingCount: 15,
+        precio: "$14.000/hr",
+        modalidad: "Presencial y Online",
+        whatsapp: "56912345678",
+        descripcion: "Egresada de ICI con mención en economía. Hice mi práctica en el Banco Central. Enseño economía de forma intuitiva con casos reales chilenos.",
+        experiencia: "Egresada · Ex-ayudante de Microeconomía",
+        color: "#8dabc4"
+    },
+    {
+        nombre: "Ignacio Vásquez",
+        carrera: "Ing. Civil Industrial",
+        carrSigla: "ICI",
+        ramos: ["Ecuaciones Diferenciales", "Estadística Aplicada", "Teoría de Probabilidades"],
+        semestres: [3, 4],
+        rating: 4.9, reviews: 27, totalRating: 4.9*27, ratingCount: 27,
+        precio: "$15.000/hr",
+        modalidad: "Online",
+        whatsapp: "56912345678",
+        descripcion: "Me encanta hacer que las matemáticas sean entendibles. Mis clases van desde la teoría necesaria hasta resolver muchos ejercicios tipo prueba. Tengo resúmenes propios de cada materia.",
+        experiencia: "10mo semestre · Ayudante de Ecuaciones Diferenciales",
+        color: "#2c4266"
+    },
+    {
+        nombre: "Valentina Soto",
+        carrera: "Ing. Civil Ambiental",
+        carrSigla: "ICA",
+        ramos: ["Fundamentos de Química", "Termodinámica", "Ecología, Medio Ambiente y Energía"],
+        semestres: [1, 4, 6],
+        rating: 4.6, reviews: 12, totalRating: 4.6*12, ratingCount: 12,
+        precio: "$12.000/hr",
+        modalidad: "Presencial y Online",
+        whatsapp: "56912345678",
+        descripcion: "Ayudante de Química por 4 semestres. Hago clases dinámicas con muchos ejercicios y tips para las pruebas. También ayudo con informes de laboratorio.",
+        experiencia: "9no semestre · Ayudante de Fundamentos de Química",
+        color: "#4a6fa5"
+    },
+    {
+        nombre: "Tomás Fernández",
+        carrera: "Ing. Civil en Computación",
+        carrSigla: "ICC",
+        ramos: ["Bases de Datos", "Sistemas Operativos y Redes", "Web Technologies"],
+        semestres: [5, 6],
+        rating: 4.8, reviews: 20, totalRating: 4.8*20, ratingCount: 20,
+        precio: "$13.000/hr",
+        modalidad: "Online",
+        whatsapp: "56912345678",
+        descripcion: "Full-stack developer con experiencia en proyectos reales. Enseño desde SQL hasta desarrollo web completo. Mis clases son 100% prácticas con proyectos.",
+        experiencia: "11vo semestre · Dev en startup + ayudante de BD",
+        color: "#3d5a80"
+    },
+    {
+        nombre: "Antonia López",
+        carrera: "Ing. Civil Industrial",
+        carrSigla: "ICI",
+        ramos: ["Optimización", "Simulación", "Modelos Estocásticos"],
+        semestres: [5, 6, 7],
+        rating: 4.7, reviews: 14, totalRating: 4.7*14, ratingCount: 14,
+        precio: "$14.000/hr",
+        modalidad: "Presencial",
+        whatsapp: "56912345678",
+        descripcion: "Especializada en investigación de operaciones. Mis clases se enfocan en resolver problemas paso a paso, con foco en modelamiento y uso de software (Excel Solver, Python).",
+        experiencia: "9no semestre · Ayudante de Optimización",
+        color: "#1b2a4a"
+    },
+    {
+        nombre: "Felipe Contreras",
+        carrera: "Ing. Civil Eléctrica",
+        carrSigla: "ICE",
+        ramos: ["Electricidad y Magnetismo", "Análisis de Circuitos", "Señales y Sistemas"],
+        semestres: [4, 5],
+        rating: 4.9, reviews: 22, totalRating: 4.9*22, ratingCount: 22,
+        precio: "$15.000/hr",
+        modalidad: "Presencial y Online",
+        whatsapp: "56912345678",
+        descripcion: "Apasionado por la electrónica y las señales. Fui el mejor alumno de Circuitos en mi generación. Enseño con muchos ejemplos prácticos y simulaciones.",
+        experiencia: "10mo semestre · Ayudante de Circuitos y E&M",
+        color: "#5a7d9a"
+    }
+];
+
+// ==========================================
+//   RENDER
+// ==========================================
+const grid = document.getElementById('cardsGrid');
+const noResults = document.getElementById('noResults');
+
+function getInitials(name) { return name.split(' ').map(n => n[0]).join(''); }
+
+function starSVG(type) {
+    if (type === 'full') return '<svg viewBox="0 0 24 24" class="star-filled"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+    if (type === 'half') return '<svg viewBox="0 0 24 24" class="star-half"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+    return '<svg viewBox="0 0 24 24" class="star-empty"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>';
+}
+
+function renderStars(rating) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        if (rating >= i) html += starSVG('full');
+        else if (rating >= i - 0.5) html += starSVG('half');
+        else html += starSVG('empty');
+    }
+    return html;
+}
+
+function renderCards() {
+    const search = document.getElementById('searchInput').value.toLowerCase();
+    const carrera = document.getElementById('filterCarrera').value;
+    const ramo = document.getElementById('filterRamo').value;
+    const semestre = document.getElementById('filterSemestre').value;
+
+    grid.innerHTML = '';
+
+    const filtered = profesores.filter(p => {
+        const matchSearch = !search ||
+            p.nombre.toLowerCase().includes(search) ||
+            p.carrera.toLowerCase().includes(search) ||
+            p.ramos.some(r => r.toLowerCase().includes(search));
+
+        const matchCarrera = carrera === 'all' ||
+            (carrera === 'Plan Común' && p.semestres.some(s => s <= 4)) ||
+            p.carrSigla === carrera;
+
+        const matchRamo = ramo === 'all' || p.ramos.includes(ramo);
+
+        const matchSemestre = semestre === 'all' || p.semestres.includes(parseInt(semestre));
+
+        return matchSearch && matchCarrera && matchRamo && matchSemestre;
+    });
+
+    noResults.style.display = filtered.length === 0 ? 'block' : 'none';
+
+    filtered.forEach((prof, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.onclick = () => openModal(prof);
+        card.innerHTML = `
+            <div class="card-top">
+                <div class="avatar" style="background:${prof.color}">${getInitials(prof.nombre)}</div>
+                <div class="card-info">
+                    <h3>${prof.nombre}</h3>
+                    <p class="career">${prof.carrera}</p>
+                </div>
+            </div>
+            <p class="card-desc">${prof.descripcion}</p>
+            <div class="card-subjects">${prof.ramos.map(r => `<span class="subject-tag">${r}</span>`).join('')}</div>
+            <div class="card-bottom">
+                <div class="rating">
+                    <div class="stars">${renderStars(prof.rating)}</div>
+                    ${prof.rating.toFixed(1)} <span style="color:var(--text-muted);font-weight:400;font-size:0.8rem">(${prof.reviews})</span>
+                </div>
+                <span class="price">${prof.precio}</span>
+            </div>`;
+        grid.appendChild(card);
+    });
+}
+
+renderCards();
+
+// Filters
+document.getElementById('searchInput').addEventListener('input', renderCards);
+document.getElementById('filterCarrera').addEventListener('change', () => {
+    // Update ramo dropdown based on carrera
+    const carrera = document.getElementById('filterCarrera').value;
+    const ramoSelect = document.getElementById('filterRamo');
+    ramoSelect.innerHTML = '<option value="all">Todos los ramos</option>';
+    let filteredRamos;
+    if (carrera === 'all') {
+        filteredRamos = ramosUnicos;
+    } else {
+        filteredRamos = [...new Set(mallaCursos.filter(c => c.carreras.includes(carrera)).map(c => c.titulo))].sort();
+    }
+    filteredRamos.forEach(r => {
+        const opt = document.createElement('option');
+        opt.value = r; opt.textContent = r;
+        ramoSelect.appendChild(opt);
+    });
+    renderCards();
+});
+document.getElementById('filterRamo').addEventListener('change', renderCards);
+document.getElementById('filterSemestre').addEventListener('change', renderCards);
+
+// ==========================================
+//   MODAL
+// ==========================================
+let currentProf = null;
+
+function openModal(prof) {
+    currentProf = prof;
+    document.getElementById('modalAvatar').style.background = prof.color;
+    document.getElementById('modalAvatar').textContent = getInitials(prof.nombre);
+    document.getElementById('modalName').textContent = prof.nombre;
+    document.getElementById('modalCareer').textContent = prof.carrera;
+    document.getElementById('modalDesc').textContent = prof.descripcion;
+    document.getElementById('modalStarsDisplay').innerHTML = renderStars(prof.rating);
+    document.getElementById('modalRatingText').textContent = `${prof.rating.toFixed(1)} (${prof.reviews} reseñas)`;
+    document.getElementById('modalPrice').textContent = prof.precio;
+    document.getElementById('modalModality').textContent = prof.modalidad;
+    document.getElementById('modalExp').textContent = prof.experiencia;
+    document.getElementById('modalSubjects').innerHTML = prof.ramos.map(r => `<span class="subject-tag">${r}</span>`).join('');
+
+    const msg = encodeURIComponent(`Hola ${prof.nombre}! Te contacto por la página de profes del CDI UAndes. Me interesa tomar clases.`);
+    document.getElementById('modalWhatsapp').href = `https://wa.me/${prof.whatsapp}?text=${msg}`;
+
+    // Reset rating stars
+    document.querySelectorAll('#rateStars svg').forEach(s => s.classList.remove('active'));
+    document.getElementById('rateMsg').style.display = 'none';
+
+    document.getElementById('modalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeForm(); } });
+
+// Rating stars interaction
+document.querySelectorAll('#rateStars svg').forEach(star => {
+    star.addEventListener('mouseenter', function() {
+        const val = parseInt(this.dataset.star);
+        document.querySelectorAll('#rateStars svg').forEach((s, i) => {
+            s.style.color = i < val ? 'var(--gold)' : '#ddd';
+            s.style.fill = i < val ? 'var(--gold)' : '#ddd';
+        });
+    });
+
+    star.addEventListener('click', function() {
+        const val = parseInt(this.dataset.star);
+        if (currentProf) {
+            // Update rating
+            currentProf.ratingCount++;
+            currentProf.totalRating += val;
+            currentProf.rating = Math.round((currentProf.totalRating / currentProf.ratingCount) * 10) / 10;
+            currentProf.reviews = currentProf.ratingCount;
+
+            // Update display
+            document.getElementById('modalStarsDisplay').innerHTML = renderStars(currentProf.rating);
+            document.getElementById('modalRatingText').textContent = `${currentProf.rating.toFixed(1)} (${currentProf.reviews} reseñas)`;
+            document.getElementById('rateMsg').style.display = 'block';
+
+            // Save to localStorage
+            saveRatings();
+
+            // Re-render cards
+            renderCards();
+        }
+
+        document.querySelectorAll('#rateStars svg').forEach((s, i) => {
+            s.classList.toggle('active', i < val);
+        });
+    });
+});
+
+document.getElementById('rateStars').addEventListener('mouseleave', () => {
+    document.querySelectorAll('#rateStars svg').forEach(s => {
+        if (!s.classList.contains('active')) {
+            s.style.color = '#ddd';
+            s.style.fill = '#ddd';
+        } else {
+            s.style.color = 'var(--gold)';
+            s.style.fill = 'var(--gold)';
+        }
+    });
+});
+
+// LocalStorage for ratings
+function saveRatings() {
+    const data = profesores.map(p => ({ nombre: p.nombre, rating: p.rating, reviews: p.reviews, totalRating: p.totalRating, ratingCount: p.ratingCount }));
+    localStorage.setItem('cdi_profes_ratings', JSON.stringify(data));
+}
+
+function loadRatings() {
+    const saved = localStorage.getItem('cdi_profes_ratings');
+    if (saved) {
+        const data = JSON.parse(saved);
+        data.forEach(d => {
+            const prof = profesores.find(p => p.nombre === d.nombre);
+            if (prof) {
+                prof.rating = d.rating;
+                prof.reviews = d.reviews;
+                prof.totalRating = d.totalRating;
+                prof.ratingCount = d.ratingCount;
+            }
+        });
+    }
+}
+
+loadRatings();
+renderCards();
+
+// ==========================================
+//   FORM
+// ==========================================
+function openForm() {
+    document.getElementById('formOverlay').classList.add('active');
+    document.getElementById('formContent').style.display = 'block';
+    document.getElementById('formSuccess').style.display = 'none';
+    document.body.style.overflow = 'hidden';
+}
+
+function closeForm() {
+    document.getElementById('formOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('formOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeForm(); });
+
+function submitForm(e) {
+    e.preventDefault();
+    const checkedRamos = [...document.querySelectorAll('#fRamos input:checked')].map(cb => cb.value);
+    if (checkedRamos.length === 0) { alert('Selecciona al menos un ramo'); return; }
+
+    const data = {
+        nombre: document.getElementById('fNombre').value,
+        carrera: document.getElementById('fCarrera').value,
+        whatsapp: document.getElementById('fWhatsapp').value,
+        precio: document.getElementById('fPrecio').value,
+        modalidad: document.getElementById('fModalidad').value,
+        descripcion: document.getElementById('fDesc').value,
+        experiencia: document.getElementById('fExp').value,
+        ramos: checkedRamos
+    };
+
+    // Save to localStorage as pending
+    const pending = JSON.parse(localStorage.getItem('cdi_profes_pending') || '[]');
+    pending.push(data);
+    localStorage.setItem('cdi_profes_pending', JSON.stringify(pending));
+
+    document.getElementById('formContent').style.display = 'none';
+    document.getElementById('formSuccess').style.display = 'block';
+}
+
+// ==========================================
+//   NAV & ANIMATIONS
+// ==========================================
+function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
+function closeNav() { document.getElementById('navLinks').classList.remove('open'); }
+window.addEventListener('scroll', () => { document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50); });
+
+const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.1 });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+function animateCounter(el, target, suffix = '') {
+    let current = 0;
+    const step = Math.ceil(target / 40);
+    const timer = setInterval(() => {
+        current += step;
+        if (current >= target) { current = target; clearInterval(timer); }
+        el.textContent = current + suffix;
+    }, 30);
+}
+
+const statsObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            animateCounter(document.getElementById('statProfes'), profesores.length, '+');
+            animateCounter(document.getElementById('statRamos'), [...new Set(profesores.flatMap(p => p.ramos))].length, '+');
+            animateCounter(document.getElementById('statAlumnos'), 150, '+');
+            statsObserver.disconnect();
+        }
+    });
+}, { threshold: 0.5 });
+statsObserver.observe(document.querySelector('.stats'));
+</script>
+
+</body>
+</html>
