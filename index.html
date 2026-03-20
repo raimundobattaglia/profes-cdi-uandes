@@ -189,36 +189,9 @@
         }
         .modal .whatsapp-btn:hover { background: #20bd5a; transform: translateY(-2px); }
 
-        /* Rating modal stars */
+        /* Rating info section */
         .rating-section { margin: 1.5rem 0; padding: 1.2rem; background: rgba(27, 42, 74, 0.03); border-radius: 14px; }
         .rating-section h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.8rem; color: var(--text-muted); }
-        .rate-stars { display: flex; gap: 4px; cursor: pointer; }
-        .rate-stars svg { width: 28px; height: 28px; color: #ddd; fill: #ddd; transition: all 0.2s; cursor: pointer; }
-        .rate-stars svg:hover, .rate-stars svg.active { color: var(--gold); fill: var(--gold); transform: scale(1.15); }
-        .rate-msg { font-size: 0.8rem; color: var(--navy-mid); margin-top: 0.5rem; display: none; font-weight: 500; }
-
-        /* Form modal */
-        .form-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(27, 42, 74, 0.5); backdrop-filter: blur(8px); z-index: 300; justify-content: center; align-items: center; padding: 2rem; }
-        .form-overlay.active { display: flex; }
-        .form-modal { background: white; border-radius: 24px; padding: 2.5rem; max-width: 560px; width: 100%; box-shadow: 0 20px 60px rgba(27, 42, 74, 0.2); position: relative; animation: modalIn 0.3s ease; max-height: 90vh; overflow-y: auto; }
-        .form-modal h2 { font-size: 1.5rem; font-weight: 800; margin-bottom: 0.5rem; }
-        .form-modal .form-sub { color: var(--text-muted); font-size: 0.9rem; margin-bottom: 2rem; }
-        .form-group { margin-bottom: 1.2rem; }
-        .form-group label { display: block; font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.4rem; }
-        .form-group input, .form-group select, .form-group textarea {
-            width: 100%; padding: 0.8rem 1rem; border-radius: 12px; border: 1px solid rgba(27, 42, 74, 0.12);
-            background: var(--bg); color: var(--text); font-size: 0.9rem; font-family: 'Inter', sans-serif; outline: none; transition: all 0.3s;
-        }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--navy-mid); box-shadow: 0 0 0 3px rgba(27, 42, 74, 0.1); }
-        .form-group textarea { resize: vertical; min-height: 80px; }
-        .form-check { display: flex; flex-wrap: wrap; gap: 0.5rem; }
-        .form-check label { display: flex; align-items: center; gap: 0.4rem; padding: 0.4rem 0.8rem; border-radius: 8px; border: 1px solid rgba(27, 42, 74, 0.12); background: var(--bg); font-size: 0.78rem; cursor: pointer; transition: all 0.2s; }
-        .form-check label:has(input:checked) { background: var(--navy-dark); color: white; border-color: var(--navy-dark); }
-        .form-check input { display: none; }
-        .form-success { display: none; text-align: center; padding: 2rem 0; }
-        .form-success svg { width: 64px; height: 64px; color: #25d366; margin-bottom: 1rem; }
-        .form-success h3 { font-size: 1.3rem; margin-bottom: 0.5rem; }
-        .form-success p { color: var(--text-muted); }
 
         /* Responsive */
         @media (max-width: 768px) {
@@ -257,7 +230,7 @@
         <ul class="nav-links" id="navLinks">
             <li><a href="#profesores" onclick="closeNav()">Profesores</a></li>
             <li><a href="#como-funciona" onclick="closeNav()">Cómo Funciona</a></li>
-            <li><a href="#" onclick="closeNav();openForm()" style="cursor:pointer">Sé Profe</a></li>
+            <li><a href="#" id="btnNavProfe" style="cursor:pointer">Sé Profe</a></li>
         </ul>
         <div class="hamburger" id="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
     </nav>
@@ -269,7 +242,7 @@
         <p>Conectamos alumnos de la UAndes con los mejores profes particulares. Aprueba tus ramos con ayuda de quienes ya los pasaron.</p>
         <div class="hero-buttons">
             <a href="#profesores" class="btn btn-primary">Ver Profesores</a>
-            <a href="#" class="btn btn-secondary" onclick="openForm()">Quiero ser profe</a>
+            <a href="#" class="btn btn-secondary" id="btnHeroProfe">Quiero ser profe</a>
         </div>
         <div class="scroll-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg></div>
     </section>
@@ -313,23 +286,6 @@
                     <option value="all">Todos los ramos</option>
                 </select>
             </div>
-            <div class="filter-group">
-                <label>Semestre</label>
-                <select id="filterSemestre">
-                    <option value="all">Todos</option>
-                    <option value="1">1er Semestre</option>
-                    <option value="2">2do Semestre</option>
-                    <option value="3">3er Semestre</option>
-                    <option value="4">4to Semestre</option>
-                    <option value="5">5to Semestre</option>
-                    <option value="6">6to Semestre</option>
-                    <option value="7">7mo Semestre</option>
-                    <option value="8">8vo Semestre</option>
-                    <option value="9">9no Semestre</option>
-                    <option value="10">10mo Semestre</option>
-                    <option value="11">11vo Semestre</option>
-                </select>
-            </div>
         </div>
 
         <div class="cards-grid" id="cardsGrid"></div>
@@ -366,7 +322,7 @@
         <div class="cta-box reveal">
             <h2>¿Quieres ser profe?</h2>
             <p>Si eres alumno o egresado de la UAndes y quieres compartir tus conocimientos (y ganar algo extra), únete a nuestra red de profes particulares.</p>
-            <a href="#" class="btn btn-primary" onclick="openForm()">Postular como Profe</a>
+            <a href="#" class="btn btn-primary" id="btnCtaProfe">Postular como Profe</a>
         </div>
     </section>
 
@@ -409,17 +365,10 @@
             <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 1rem; font-weight: 600;">Ramos que enseña:</p>
             <div class="modal-subjects" id="modalSubjects"></div>
 
-            <!-- Rating section -->
+            <!-- Rating info -->
             <div class="rating-section">
-                <h4>Califica a este profe</h4>
-                <div class="rate-stars" id="rateStars">
-                    <svg viewBox="0 0 24 24" data-star="1"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg viewBox="0 0 24 24" data-star="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg viewBox="0 0 24 24" data-star="3"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg viewBox="0 0 24 24" data-star="4"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                    <svg viewBox="0 0 24 24" data-star="5"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                </div>
-                <p class="rate-msg" id="rateMsg">¡Gracias por tu calificación!</p>
+                <h4>📝 ¿Ya tomaste clase con este profe?</h4>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem;">Tu profe te compartirá un formulario de evaluación al finalizar la clase.</p>
             </div>
 
             <a id="modalWhatsapp" href="#" target="_blank" class="whatsapp-btn">
@@ -429,69 +378,12 @@
         </div>
     </div>
 
-    <!-- Form Modal - Postular como Profe -->
-    <div class="form-overlay" id="formOverlay">
-        <div class="form-modal">
-            <button class="modal-close" onclick="closeForm()">&times;</button>
-            <div id="formContent">
-                <h2>Postula como Profe</h2>
-                <p class="form-sub">Completa tus datos y te agregaremos a la plataforma.</p>
-                <form id="profeForm" onsubmit="submitForm(event)">
-                    <div class="form-group">
-                        <label>Nombre completo *</label>
-                        <input type="text" id="fNombre" required placeholder="Ej: Martín González">
-                    </div>
-                    <div class="form-group">
-                        <label>Carrera *</label>
-                        <select id="fCarrera" required>
-                            <option value="">Selecciona tu carrera</option>
-                            <option value="Ing. Civil Industrial">Ing. Civil Industrial (ICI)</option>
-                            <option value="Ing. Civil en Obras Civiles">Ing. Civil en Obras Civiles (IOC)</option>
-                            <option value="Ing. Civil Eléctrica">Ing. Civil Eléctrica (ICE)</option>
-                            <option value="Ing. Civil en Computación">Ing. Civil en Computación (ICC)</option>
-                            <option value="Ing. Civil Ambiental">Ing. Civil Ambiental (ICA)</option>
-                            <option value="Ing. Civil Química">Ing. Civil Química (ICQ)</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>WhatsApp (con código de país, ej: 56912345678) *</label>
-                        <input type="tel" id="fWhatsapp" required placeholder="56912345678">
-                    </div>
-                    <div class="form-group">
-                        <label>Precio por hora (CLP) *</label>
-                        <input type="text" id="fPrecio" required placeholder="Ej: $12.000/hr">
-                    </div>
-                    <div class="form-group">
-                        <label>Modalidad *</label>
-                        <select id="fModalidad" required>
-                            <option value="">Selecciona</option>
-                            <option value="Presencial y Online">Presencial y Online</option>
-                            <option value="Presencial">Solo Presencial</option>
-                            <option value="Online">Solo Online</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Descripción breve sobre ti *</label>
-                        <textarea id="fDesc" required placeholder="Ej: Alumno de 5to año, he sido ayudante de Cálculo I y II por 3 semestres..."></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Experiencia / Semestre actual *</label>
-                        <input type="text" id="fExp" required placeholder="Ej: 8vo semestre, ayudante de Cálculo I">
-                    </div>
-                    <div class="form-group">
-                        <label>Ramos que puedes enseñar *</label>
-                        <div class="form-check" id="fRamos"></div>
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width:100%;margin-top:1rem;">Enviar Postulación</button>
-                </form>
-            </div>
-            <div class="form-success" id="formSuccess">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                <h3>¡Postulación enviada!</h3>
-                <p>Te contactaremos pronto para agregarte a la plataforma.</p>
-            </div>
-        </div>
-    </div>
+    <!-- Google Form links (hidden, used by JS) -->
+    <!-- IMPORTANTE: Reemplazar estas URLs con los Google Forms reales -->
+    <script>
+        const GOOGLE_FORM_POSTULACION = "https://forms.gle/REEMPLAZAR_CON_TU_LINK_POSTULACION";
+        const GOOGLE_FORM_EVALUACION = "https://forms.gle/REEMPLAZAR_CON_TU_LINK_EVALUACION";
+    </script>
 
 <script>
 // ==========================================
@@ -649,15 +541,6 @@ ramosUnicos.forEach(r => {
     filterRamoSelect.appendChild(opt);
 });
 
-// Also populate form checkboxes
-const popularRamos = mallaCursos.filter(c => c.semestre >= 1 && c.semestre <= 6).map(c => c.titulo);
-const uniquePopular = [...new Set(popularRamos)].sort();
-const fRamosContainer = document.getElementById('fRamos');
-ramosUnicos.forEach(r => {
-    const lbl = document.createElement('label');
-    lbl.innerHTML = `<input type="checkbox" name="ramos" value="${r}"> ${r}`;
-    fRamosContainer.appendChild(lbl);
-});
 
 // ==========================================
 //   PROFESORES DATA
@@ -666,129 +549,45 @@ const avatarColors = ["#1b2a4a","#3d5a80","#5a7d9a","#8dabc4","#2c4266","#4a6fa5
 
 const profesores = [
     {
-        nombre: "Martín González",
-        carrera: "Ing. Civil Industrial",
-        carrSigla: "ICI",
-        ramos: ["Cálculo I", "Cálculo II", "Álgebra Lineal"],
-        semestres: [2, 3],
-        rating: 4.9, reviews: 23, totalRating: 4.9*23, ratingCount: 23,
-        precio: "$15.000/hr",
+        nombre: "Andrés",
+        carrera: "Ingeniería UAndes",
+        carrSigla: "PC",
+        ramos: ["Introducción al Cálculo", "Introducción al Álgebra", "Cálculo I", "Cálculo II", "Álgebra Lineal", "Introducción a la Mecánica", "Mecánica y Ondas"],
+        semestres: [1, 2, 3],
+        rating: 0, reviews: 0, totalRating: 0, ratingCount: 0,
+        precio: "Consultar",
         modalidad: "Presencial y Online",
-        whatsapp: "56912345678",
-        descripcion: "Alumno de 9no semestre de ICI. He sido ayudante de Cálculo I por 3 semestres y de Álgebra Lineal por 2. Me apasiona enseñar matemáticas de forma clara y con muchos ejercicios prácticos.",
-        experiencia: "9no semestre · Ayudante de Cálculo I y Álgebra Lineal",
+        whatsapp: "56942331380",
+        descripcion: "Clases personalizadas en matemáticas y física. Cuenta con material propio y experiencia como ayudante. Enfoque práctico para resolver problemas paso a paso.",
+        experiencia: "Experiencia como Ayudante · Material propio",
         color: "#1b2a4a"
     },
     {
-        nombre: "Sofía Araya",
-        carrera: "Ing. Civil en Computación",
-        carrSigla: "ICC",
-        ramos: ["Programación", "Estructuras de Datos y Algoritmos", "Bases de Datos"],
-        semestres: [1, 5, 6],
-        rating: 5.0, reviews: 31, totalRating: 5.0*31, ratingCount: 31,
-        precio: "$12.000/hr",
-        modalidad: "Online",
-        whatsapp: "56912345678",
-        descripcion: "Apasionada por la programación y la computación. Enseño desde lo básico (Python/C) hasta estructuras de datos avanzadas. Mis clases son prácticas con ejercicios de programación en vivo.",
-        experiencia: "10mo semestre · Ayudante de Programación y EDA",
-        color: "#3d5a80"
-    },
-    {
-        nombre: "Diego Muñoz",
+        nombre: "Josefina Muro",
         carrera: "Ing. Civil en Obras Civiles",
         carrSigla: "IOC",
-        ramos: ["Introducción a la Mecánica", "Mecánica y Ondas", "Estática"],
-        semestres: [2, 3, 4],
-        rating: 4.8, reviews: 18, totalRating: 4.8*18, ratingCount: 18,
-        precio: "$13.000/hr",
-        modalidad: "Presencial",
-        whatsapp: "56912345678",
-        descripcion: "Especialista en física y mecánica. Mis clases se enfocan en entender los conceptos y aplicarlos a problemas reales. Uso muchos diagramas y ejemplos visuales.",
-        experiencia: "8vo semestre · Mejor promedio en Estática 2024",
-        color: "#5a7d9a"
-    },
-    {
-        nombre: "Catalina Rojas",
-        carrera: "Ing. Civil Industrial",
-        carrSigla: "ICI",
-        ramos: ["Microeconomía", "Macroeconomía", "Fundamentos de Economía"],
-        semestres: [2, 6, 8],
-        rating: 4.7, reviews: 15, totalRating: 4.7*15, ratingCount: 15,
-        precio: "$14.000/hr",
+        ramos: ["Estática", "Cálculo I", "Cálculo II", "Introducción a la Mecánica", "Mecánica y Ondas", "Introducción al Álgebra", "Introducción al Cálculo"],
+        semestres: [1, 2, 3, 4],
+        rating: 0, reviews: 0, totalRating: 0, ratingCount: 0,
+        precio: "Consultar",
         modalidad: "Presencial y Online",
-        whatsapp: "56912345678",
-        descripcion: "Egresada de ICI con mención en economía. Hice mi práctica en el Banco Central. Enseño economía de forma intuitiva con casos reales chilenos.",
-        experiencia: "Egresada · Ex-ayudante de Microeconomía",
-        color: "#8dabc4"
-    },
-    {
-        nombre: "Ignacio Vásquez",
-        carrera: "Ing. Civil Industrial",
-        carrSigla: "ICI",
-        ramos: ["Ecuaciones Diferenciales", "Estadística Aplicada", "Teoría de Probabilidades"],
-        semestres: [3, 4],
-        rating: 4.9, reviews: 27, totalRating: 4.9*27, ratingCount: 27,
-        precio: "$15.000/hr",
-        modalidad: "Online",
-        whatsapp: "56912345678",
-        descripcion: "Me encanta hacer que las matemáticas sean entendibles. Mis clases van desde la teoría necesaria hasta resolver muchos ejercicios tipo prueba. Tengo resúmenes propios de cada materia.",
-        experiencia: "10mo semestre · Ayudante de Ecuaciones Diferenciales",
-        color: "#2c4266"
-    },
-    {
-        nombre: "Valentina Soto",
-        carrera: "Ing. Civil Ambiental",
-        carrSigla: "ICA",
-        ramos: ["Fundamentos de Química", "Termodinámica", "Ecología, Medio Ambiente y Energía"],
-        semestres: [1, 4, 6],
-        rating: 4.6, reviews: 12, totalRating: 4.6*12, ratingCount: 12,
-        precio: "$12.000/hr",
-        modalidad: "Presencial y Online",
-        whatsapp: "56912345678",
-        descripcion: "Ayudante de Química por 4 semestres. Hago clases dinámicas con muchos ejercicios y tips para las pruebas. También ayudo con informes de laboratorio.",
-        experiencia: "9no semestre · Ayudante de Fundamentos de Química",
-        color: "#4a6fa5"
-    },
-    {
-        nombre: "Tomás Fernández",
-        carrera: "Ing. Civil en Computación",
-        carrSigla: "ICC",
-        ramos: ["Bases de Datos", "Sistemas Operativos y Redes", "Web Technologies"],
-        semestres: [5, 6],
-        rating: 4.8, reviews: 20, totalRating: 4.8*20, ratingCount: 20,
-        precio: "$13.000/hr",
-        modalidad: "Online",
-        whatsapp: "56912345678",
-        descripcion: "Full-stack developer con experiencia en proyectos reales. Enseño desde SQL hasta desarrollo web completo. Mis clases son 100% prácticas con proyectos.",
-        experiencia: "11vo semestre · Dev en startup + ayudante de BD",
+        whatsapp: "56973756639",
+        descripcion: "Estudiante de Ingeniería Civil en Obras Civiles en la UAndes, cursando cuarto año. Ofrece clases presenciales y online en ramos de matemáticas y física del plan común.",
+        experiencia: "4to año · Ing. Civil en Obras Civiles UAndes",
         color: "#3d5a80"
     },
     {
-        nombre: "Antonia López",
+        nombre: "Antonia Seitz",
         carrera: "Ing. Civil Industrial",
         carrSigla: "ICI",
-        ramos: ["Optimización", "Simulación", "Modelos Estocásticos"],
-        semestres: [5, 6, 7],
-        rating: 4.7, reviews: 14, totalRating: 4.7*14, ratingCount: 14,
-        precio: "$14.000/hr",
-        modalidad: "Presencial",
-        whatsapp: "56912345678",
-        descripcion: "Especializada en investigación de operaciones. Mis clases se enfocan en resolver problemas paso a paso, con foco en modelamiento y uso de software (Excel Solver, Python).",
-        experiencia: "9no semestre · Ayudante de Optimización",
-        color: "#1b2a4a"
-    },
-    {
-        nombre: "Felipe Contreras",
-        carrera: "Ing. Civil Eléctrica",
-        carrSigla: "ICE",
-        ramos: ["Electricidad y Magnetismo", "Análisis de Circuitos", "Señales y Sistemas"],
-        semestres: [4, 5],
-        rating: 4.9, reviews: 22, totalRating: 4.9*22, ratingCount: 22,
-        precio: "$15.000/hr",
+        ramos: ["Cálculo I", "Cálculo II", "Introducción a la Mecánica", "Álgebra Lineal", "Métodos Estadísticos", "Optimización", "Econometría", "Finanzas II", "Probabilidad y Estadística", "Termodinámica", "Macroeconomía", "Gestión de Operaciones"],
+        semestres: [1, 2, 3, 4, 5, 6, 7, 8],
+        rating: 0, reviews: 0, totalRating: 0, ratingCount: 0,
+        precio: "Consultar",
         modalidad: "Presencial y Online",
-        whatsapp: "56912345678",
-        descripcion: "Apasionado por la electrónica y las señales. Fui el mejor alumno de Circuitos en mi generación. Enseño con muchos ejemplos prácticos y simulaciones.",
-        experiencia: "10mo semestre · Ayudante de Circuitos y E&M",
+        whatsapp: "56999197788",
+        descripcion: "Estudiante de 5to año de Ingeniería Civil Industrial en la UAndes. Experiencia como Ayudante de Cátedra de Finanzas I, y 2 años como ayudante de Cálculo II (2024-2025). Amplio dominio en matemáticas, estadística, economía y gestión.",
+        experiencia: "5to año ICI · Ayudante de Finanzas I y Cálculo II (2024-2025)",
         color: "#5a7d9a"
     }
 ];
@@ -821,7 +620,6 @@ function renderCards() {
     const search = document.getElementById('searchInput').value.toLowerCase();
     const carrera = document.getElementById('filterCarrera').value;
     const ramo = document.getElementById('filterRamo').value;
-    const semestre = document.getElementById('filterSemestre').value;
 
     grid.innerHTML = '';
 
@@ -837,9 +635,7 @@ function renderCards() {
 
         const matchRamo = ramo === 'all' || p.ramos.includes(ramo);
 
-        const matchSemestre = semestre === 'all' || p.semestres.includes(parseInt(semestre));
-
-        return matchSearch && matchCarrera && matchRamo && matchSemestre;
+        return matchSearch && matchCarrera && matchRamo;
     });
 
     noResults.style.display = filtered.length === 0 ? 'block' : 'none';
@@ -892,7 +688,6 @@ document.getElementById('filterCarrera').addEventListener('change', () => {
     renderCards();
 });
 document.getElementById('filterRamo').addEventListener('change', renderCards);
-document.getElementById('filterSemestre').addEventListener('change', renderCards);
 
 // ==========================================
 //   MODAL
@@ -916,10 +711,6 @@ function openModal(prof) {
     const msg = encodeURIComponent(`Hola ${prof.nombre}! Te contacto por la página de profes del CDI UAndes. Me interesa tomar clases.`);
     document.getElementById('modalWhatsapp').href = `https://wa.me/${prof.whatsapp}?text=${msg}`;
 
-    // Reset rating stars
-    document.querySelectorAll('#rateStars svg').forEach(s => s.classList.remove('active'));
-    document.getElementById('rateMsg').style.display = 'none';
-
     document.getElementById('modalOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
 }
@@ -930,123 +721,19 @@ function closeModal() {
 }
 
 document.getElementById('modalOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeModal(); });
-document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); closeForm(); } });
-
-// Rating stars interaction
-document.querySelectorAll('#rateStars svg').forEach(star => {
-    star.addEventListener('mouseenter', function() {
-        const val = parseInt(this.dataset.star);
-        document.querySelectorAll('#rateStars svg').forEach((s, i) => {
-            s.style.color = i < val ? 'var(--gold)' : '#ddd';
-            s.style.fill = i < val ? 'var(--gold)' : '#ddd';
-        });
-    });
-
-    star.addEventListener('click', function() {
-        const val = parseInt(this.dataset.star);
-        if (currentProf) {
-            // Update rating
-            currentProf.ratingCount++;
-            currentProf.totalRating += val;
-            currentProf.rating = Math.round((currentProf.totalRating / currentProf.ratingCount) * 10) / 10;
-            currentProf.reviews = currentProf.ratingCount;
-
-            // Update display
-            document.getElementById('modalStarsDisplay').innerHTML = renderStars(currentProf.rating);
-            document.getElementById('modalRatingText').textContent = `${currentProf.rating.toFixed(1)} (${currentProf.reviews} reseñas)`;
-            document.getElementById('rateMsg').style.display = 'block';
-
-            // Save to localStorage
-            saveRatings();
-
-            // Re-render cards
-            renderCards();
-        }
-
-        document.querySelectorAll('#rateStars svg').forEach((s, i) => {
-            s.classList.toggle('active', i < val);
-        });
-    });
-});
-
-document.getElementById('rateStars').addEventListener('mouseleave', () => {
-    document.querySelectorAll('#rateStars svg').forEach(s => {
-        if (!s.classList.contains('active')) {
-            s.style.color = '#ddd';
-            s.style.fill = '#ddd';
-        } else {
-            s.style.color = 'var(--gold)';
-            s.style.fill = 'var(--gold)';
-        }
-    });
-});
-
-// LocalStorage for ratings
-function saveRatings() {
-    const data = profesores.map(p => ({ nombre: p.nombre, rating: p.rating, reviews: p.reviews, totalRating: p.totalRating, ratingCount: p.ratingCount }));
-    localStorage.setItem('cdi_profes_ratings', JSON.stringify(data));
-}
-
-function loadRatings() {
-    const saved = localStorage.getItem('cdi_profes_ratings');
-    if (saved) {
-        const data = JSON.parse(saved);
-        data.forEach(d => {
-            const prof = profesores.find(p => p.nombre === d.nombre);
-            if (prof) {
-                prof.rating = d.rating;
-                prof.reviews = d.reviews;
-                prof.totalRating = d.totalRating;
-                prof.ratingCount = d.ratingCount;
-            }
-        });
-    }
-}
-
-loadRatings();
-renderCards();
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeModal(); } });
 
 // ==========================================
-//   FORM
+//   GOOGLE FORMS - Postulación y Evaluación
 // ==========================================
 function openForm() {
-    document.getElementById('formOverlay').classList.add('active');
-    document.getElementById('formContent').style.display = 'block';
-    document.getElementById('formSuccess').style.display = 'none';
-    document.body.style.overflow = 'hidden';
+    window.open(GOOGLE_FORM_POSTULACION, '_blank');
 }
 
-function closeForm() {
-    document.getElementById('formOverlay').classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-document.getElementById('formOverlay').addEventListener('click', e => { if (e.target === e.currentTarget) closeForm(); });
-
-function submitForm(e) {
-    e.preventDefault();
-    const checkedRamos = [...document.querySelectorAll('#fRamos input:checked')].map(cb => cb.value);
-    if (checkedRamos.length === 0) { alert('Selecciona al menos un ramo'); return; }
-
-    const data = {
-        nombre: document.getElementById('fNombre').value,
-        carrera: document.getElementById('fCarrera').value,
-        whatsapp: document.getElementById('fWhatsapp').value,
-        precio: document.getElementById('fPrecio').value,
-        modalidad: document.getElementById('fModalidad').value,
-        descripcion: document.getElementById('fDesc').value,
-        experiencia: document.getElementById('fExp').value,
-        ramos: checkedRamos
-    };
-
-    // Save to localStorage as pending
-    const pending = JSON.parse(localStorage.getItem('cdi_profes_pending') || '[]');
-    pending.push(data);
-    localStorage.setItem('cdi_profes_pending', JSON.stringify(pending));
-
-    document.getElementById('formContent').style.display = 'none';
-    document.getElementById('formSuccess').style.display = 'block';
-}
+// Connect all "be a tutor" buttons to Google Form
+document.getElementById('btnHeroProfe').addEventListener('click', e => { e.preventDefault(); openForm(); });
+document.getElementById('btnCtaProfe').addEventListener('click', e => { e.preventDefault(); openForm(); });
+document.getElementById('btnNavProfe').addEventListener('click', e => { e.preventDefault(); closeNav(); openForm(); });
 
 // ==========================================
 //   NAV & ANIMATIONS
