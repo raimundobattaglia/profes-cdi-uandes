@@ -131,7 +131,7 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
 
         /* Stats */
-        .stats { display: flex; justify-content: center; gap: 4rem; padding: 3rem 2rem; position: relative; z-index: 1; }
+        .stats { display: flex; justify-content: center; gap: 4rem; padding: 2rem 2rem 0; position: relative; z-index: 1; }
         .stat { text-align: center; }
         .stat-number { font-size: 2.5rem; font-weight: 900; background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .stat-label { color: var(--text-muted); font-size: 0.85rem; margin-top: 0.3rem; }
@@ -177,7 +177,7 @@
         .card:hover { transform: translateY(-8px); border-color: rgba(27, 42, 74, 0.15); box-shadow: 0 20px 40px rgba(27, 42, 74, 0.12); }
         .card:hover::before { opacity: 1; }
         .card-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
-        .avatar { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: white; flex-shrink: 0; overflow: hidden; }
+        .avatar { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: white; flex-shrink: 0; overflow: hidden; border: 2px solid rgba(27, 42, 74, 0.08); }
         img.avatar { object-fit: cover; }
         .card-info h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
         .card-info .career { font-size: 0.8rem; color: var(--text-muted); }
@@ -186,6 +186,7 @@
         .subject-tag { padding: 0.3rem 0.7rem; border-radius: 8px; font-size: 0.72rem; font-weight: 500; background: rgba(27, 42, 74, 0.05); color: var(--text-muted); border: 1px solid rgba(27, 42, 74, 0.08); }
         .card-bottom { display: flex; justify-content: space-between; align-items: center; padding-top: 1rem; border-top: 1px solid rgba(27, 42, 74, 0.08); }
         .rating { display: flex; align-items: center; gap: 0.3rem; font-size: 0.9rem; font-weight: 600; }
+        .rating-count { font-weight: 400; color: var(--text-muted); font-size: 0.8rem; }
         .stars { display: flex; gap: 2px; }
         .stars svg { width: 14px; height: 14px; }
         .star-filled { color: var(--gold); fill: var(--gold); }
@@ -231,6 +232,7 @@
         footer p { color: var(--text-muted); font-size: 0.85rem; }
         footer .footer-brand { font-weight: 700; color: var(--navy-dark); font-size: 1rem; margin-bottom: 0.5rem; display: flex; align-items: center; justify-content: center; gap: 0.4rem; }
         .footer-logo { width: 28px; height: 28px; object-fit: contain; }
+        footer a:hover { color: var(--navy-dark) !important; transform: translateY(-1px); }
 
         /* Modal */
         .modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(27, 42, 74, 0.5); backdrop-filter: blur(8px); z-index: 200; justify-content: center; align-items: center; padding: 2rem; }
@@ -277,12 +279,18 @@
             html.dark .nav-links { background: #0d1b2a !important; }
             .nav-links a { font-size: 1.5rem; font-weight: 600; color: var(--text); }
             .hamburger { display: flex; z-index: 301; }
+            .hero h1 { font-size: clamp(2rem, 8vw, 2.8rem); }
+            .hero p { font-size: 1rem; }
+            .section-header h2 { font-size: 1.7rem; }
             .stats { gap: 2rem; flex-wrap: wrap; }
             .cards-grid { grid-template-columns: 1fr; }
             .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; }
             .btn { text-align: center; }
             .cta-box { padding: 2rem; }
+            .cta-box h2 { font-size: 1.5rem; }
             .filter-row { flex-direction: column; align-items: stretch; }
+            section { padding: 3rem 1.5rem; }
+            .cta-section { padding: 3rem 1.5rem; }
         }
 
         /* Hamburger animation */
@@ -292,6 +300,13 @@
 
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        /* Scroll to top */
+        .scroll-top { position: fixed; bottom: 2rem; right: 2rem; width: 44px; height: 44px; border-radius: 50%; background: var(--navy-dark); color: white; border: none; cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 90; opacity: 0; transform: translateY(20px); transition: all 0.3s; box-shadow: 0 4px 15px rgba(27, 42, 74, 0.3); }
+        .scroll-top.show { opacity: 1; transform: translateY(0); }
+        .scroll-top:hover { background: var(--navy-mid); transform: translateY(-3px); box-shadow: 0 6px 20px rgba(27, 42, 74, 0.4); }
+        html.dark .scroll-top { background: #3d5a80; box-shadow: 0 4px 15px rgba(0,0,0,0.4); }
+        html.dark .scroll-top:hover { background: #5a7d9a; }
     </style>
 </head>
 <body>
@@ -440,6 +455,11 @@
             <a href="#" class="btn btn-primary" id="btnCtaProfe">Postular como Profesor</a>
         </div>
     </section>
+
+    <!-- Scroll to top -->
+    <button class="scroll-top" id="scrollTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Volver arriba">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M18 15l-6-6-6 6"/></svg>
+    </button>
 
     <!-- Footer -->
     <footer>
@@ -1100,7 +1120,10 @@ function toggleDarkMode() {
 
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); document.getElementById('hamburger').classList.toggle('active'); }
 function closeNav() { document.getElementById('navLinks').classList.remove('open'); document.getElementById('hamburger').classList.remove('active'); }
-window.addEventListener('scroll', () => { document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50); });
+window.addEventListener('scroll', () => {
+    document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50);
+    document.getElementById('scrollTop').classList.toggle('show', window.scrollY > 500);
+});
 
 const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
