@@ -128,7 +128,8 @@
         .card:hover { transform: translateY(-8px); border-color: rgba(27, 42, 74, 0.15); box-shadow: 0 20px 40px rgba(27, 42, 74, 0.12); }
         .card:hover::before { opacity: 1; }
         .card-top { display: flex; align-items: center; gap: 1rem; margin-bottom: 0.8rem; }
-        .avatar { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: white; flex-shrink: 0; }
+        .avatar { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; font-weight: 800; color: white; flex-shrink: 0; overflow: hidden; }
+        img.avatar { object-fit: cover; }
         .card-info h3 { font-size: 1.05rem; font-weight: 700; margin-bottom: 0.2rem; }
         .card-info .career { font-size: 0.8rem; color: var(--text-muted); }
         .card-desc { font-size: 0.82rem; color: var(--text-muted); line-height: 1.5; margin-bottom: 1rem; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
@@ -383,6 +384,15 @@
     <script>
         const GOOGLE_FORM_POSTULACION = "https://docs.google.com/forms/d/e/1FAIpQLSen9zLGnzOT5ntjHai2sAwQe_a93KmmwnGvYzanFI3vrzlVjw/viewform";
         const GOOGLE_FORM_EVALUACION = "https://docs.google.com/forms/d/e/1FAIpQLSfYuiwcfcQqjrqQm_cbWqFhB_ZRdHvSfkXZa77mxvcTn-uZug/viewform";
+
+        // =====================================================
+        // CONFIGURACIÓN - Apps Script URL
+        // =====================================================
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw22MNkC-lY1TaR9Vinfvd79DjW81g8hqds4HaFFdRAt8LbhM7oGaJyK48mXzznbi4/exec";
+
+        // Entry ID del campo "nombre del profesor" en el form de evaluación
+        // (se obtiene generando un link pre-llenado del form)
+        const EVAL_ENTRY_ID = "PEGAR_ENTRY_ID_AQUI";
     </script>
 
 <script>
@@ -543,22 +553,23 @@ ramosUnicos.forEach(r => {
 
 
 // ==========================================
-//   PROFESORES DATA
+//   PROFESORES DATA (carga dinámica desde Google Sheets)
 // ==========================================
 const avatarColors = ["#1b2a4a","#3d5a80","#5a7d9a","#8dabc4","#2c4266","#4a6fa5"];
 
-const profesores = [
+// Datos de respaldo (se usan si falla la conexión al API)
+const profesoresFallback = [
     {
         nombre: "Andrés",
         carrera: "Ingeniería UAndes",
         carrSigla: "PC",
         ramos: ["Introducción al Cálculo", "Introducción al Álgebra", "Cálculo I", "Cálculo II", "Álgebra Lineal", "Introducción a la Mecánica", "Mecánica y Ondas"],
         semestres: [1, 2, 3],
-        rating: 0, reviews: 0, totalRating: 0, ratingCount: 0,
+        rating: 0, reviews: 0,
         precio: "Consultar",
         modalidad: "Presencial y Online",
         whatsapp: "56942331380",
-        descripcion: "Clases personalizadas en matemáticas y física. Cuenta con material propio y experiencia como ayudante. Enfoque práctico para resolver problemas paso a paso.",
+        descripcion: "Clases personalizadas en matemáticas y física. Cuenta con material propio y experiencia como ayudante.",
         experiencia: "Experiencia como Ayudante · Material propio",
         color: "#1b2a4a"
     },
@@ -568,11 +579,11 @@ const profesores = [
         carrSigla: "IOC",
         ramos: ["Estática", "Cálculo I", "Cálculo II", "Introducción a la Mecánica", "Mecánica y Ondas", "Introducción al Álgebra", "Introducción al Cálculo"],
         semestres: [1, 2, 3, 4],
-        rating: 0, reviews: 0, totalRating: 0, ratingCount: 0,
+        rating: 0, reviews: 0,
         precio: "Consultar",
         modalidad: "Presencial y Online",
         whatsapp: "56973756639",
-        descripcion: "Estudiante de Ingeniería Civil en Obras Civiles en la UAndes, cursando cuarto año. Ofrece clases presenciales y online en ramos de matemáticas y física del plan común.",
+        descripcion: "Estudiante de Ingeniería Civil en Obras Civiles en la UAndes, cursando cuarto año.",
         experiencia: "4to año · Ing. Civil en Obras Civiles UAndes",
         color: "#3d5a80"
     },
@@ -582,15 +593,135 @@ const profesores = [
         carrSigla: "ICI",
         ramos: ["Cálculo I", "Cálculo II", "Introducción a la Mecánica", "Álgebra Lineal", "Métodos Estadísticos", "Optimización", "Econometría", "Finanzas II", "Probabilidad y Estadística", "Termodinámica", "Macroeconomía", "Gestión de Operaciones"],
         semestres: [1, 2, 3, 4, 5, 6, 7, 8],
-        rating: 0, reviews: 0, totalRating: 0, ratingCount: 0,
+        rating: 0, reviews: 0,
         precio: "Consultar",
         modalidad: "Presencial y Online",
         whatsapp: "56999197788",
-        descripcion: "Estudiante de 5to año de Ingeniería Civil Industrial en la UAndes. Experiencia como Ayudante de Cátedra de Finanzas I, y 2 años como ayudante de Cálculo II (2024-2025). Amplio dominio en matemáticas, estadística, economía y gestión.",
+        descripcion: "Estudiante de 5to año de Ingeniería Civil Industrial en la UAndes. Ayudante de Finanzas I y Cálculo II.",
         experiencia: "5to año ICI · Ayudante de Finanzas I y Cálculo II (2024-2025)",
         color: "#5a7d9a"
     }
 ];
+
+let profesores = [];
+
+// Mapear sigla de carrera
+function getCarreraSigla(carrera) {
+    if (!carrera) return "PC";
+    const c = carrera.toLowerCase();
+    if (c.includes('industrial')) return 'ICI';
+    if (c.includes('obras') || c.includes('civil') && c.includes('obras')) return 'IOC';
+    if (c.includes('eléctrica') || c.includes('electrica')) return 'ICE';
+    if (c.includes('computación') || c.includes('computacion')) return 'ICC';
+    if (c.includes('ambiental')) return 'ICA';
+    if (c.includes('química') || c.includes('quimica')) return 'ICQ';
+    return 'PC';
+}
+
+// Convertir link de Google Drive a URL de imagen directa
+function getDriveImageUrl(url) {
+    if (!url) return null;
+    let id = null;
+    // Formato: https://drive.google.com/open?id=XXXXX
+    const match1 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+    // Formato: https://drive.google.com/file/d/XXXXX/view
+    const match2 = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    id = (match1 && match1[1]) || (match2 && match2[1]);
+    if (!id) return null;
+    return `https://lh3.googleusercontent.com/d/${id}`;
+}
+
+// Mapear datos del Google Sheets al formato de la página
+function mapSheetData(row) {
+    const nombre = row['Nombre completo'] || '';
+    const whatsapp = (row['Número de WhatsApp'] || '').toString().replace(/[^0-9]/g, '');
+    const carrera = row['Carrera'] || 'Ingeniería UAndes';
+    const anio = row['Año que cursas'] || '';
+    const ramosRaw = row['Ramos que enseñas'] || '';
+    const modalidad = row['Modalidad'] || 'Presencial y Online';
+    const precioRaw = row['Precio por hora (CLP)'] || '';
+    const experiencia = row['Experiencia'] || '';
+    const fotoUrl = getDriveImageUrl(row['FOTO'] || '');
+
+    // Parsear ramos (vienen separados por coma o punto y coma)
+    const ramos = ramosRaw.split(/[,;]+/).map(r => r.trim()).filter(r => r.length > 0);
+
+    // Detectar semestres según ramos
+    const semestres = [...new Set(ramos.map(r => {
+        const curso = mallaCursos.find(c => c.titulo.toLowerCase() === r.toLowerCase());
+        return curso ? curso.semestre : null;
+    }).filter(s => s !== null))];
+
+    // Formato precio
+    const precio = precioRaw ? `$${parseInt(precioRaw).toLocaleString('es-CL')}/hr` : 'Consultar';
+
+    const sigla = getCarreraSigla(carrera);
+    const colorIndex = Math.abs(nombre.split('').reduce((a, c) => a + c.charCodeAt(0), 0)) % avatarColors.length;
+
+    return {
+        nombre,
+        carrera,
+        carrSigla: sigla,
+        ramos,
+        semestres: semestres.length > 0 ? semestres : [1,2,3,4],
+        rating: 0,
+        reviews: 0,
+        precio,
+        modalidad,
+        whatsapp: whatsapp.startsWith('56') ? whatsapp : '56' + whatsapp,
+        descripcion: `Estudiante de ${anio} de ${carrera} en la UAndes. ${experiencia}`,
+        experiencia: `${anio} · ${carrera}` + (experiencia ? ` · ${experiencia}` : ''),
+        color: avatarColors[colorIndex],
+        foto: fotoUrl
+    };
+}
+
+// Cargar profesores desde Google Sheets
+async function loadProfesores() {
+    // Mostrar datos en cache mientras carga
+    const cached = localStorage.getItem('profes_cdi_cache');
+    if (cached) {
+        try {
+            profesores = JSON.parse(cached);
+            renderCards();
+        } catch(e) {}
+    }
+
+    try {
+        const response = await fetch(APPS_SCRIPT_URL);
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+            profesores = data.map(mapSheetData).filter(p => p.nombre.length > 0);
+            localStorage.setItem('profes_cdi_cache', JSON.stringify(profesores));
+        } else if (!cached || profesores.length === 0) {
+            profesores = profesoresFallback;
+        }
+    } catch (error) {
+        console.error('Error cargando profes:', error);
+        if (!cached || profesores.length === 0) profesores = profesoresFallback;
+    }
+
+    renderCards();
+    updateStats();
+    hideLoading();
+}
+
+function hideLoading() {
+    const loader = document.getElementById('loadingIndicator');
+    if (loader) loader.style.display = 'none';
+}
+
+function updateStats() {
+    // Los stats se actualizan cuando el observer los detecta
+}
+
+// Generar URL de evaluación pre-llenada para un profesor
+function getEvalUrl(profNombre) {
+    if (EVAL_ENTRY_ID === "PEGAR_ENTRY_ID_AQUI" || !EVAL_ENTRY_ID) {
+        return GOOGLE_FORM_EVALUACION;
+    }
+    return GOOGLE_FORM_EVALUACION + '?usp=pp_url&entry.' + EVAL_ENTRY_ID + '=' + encodeURIComponent(profNombre);
+}
 
 // ==========================================
 //   RENDER
@@ -646,7 +777,10 @@ function renderCards() {
         card.onclick = () => openModal(prof);
         card.innerHTML = `
             <div class="card-top">
-                <div class="avatar" style="background:${prof.color}">${getInitials(prof.nombre)}</div>
+                ${prof.foto
+                    ? `<img src="${prof.foto}" alt="${prof.nombre}" class="avatar" style="object-fit:cover;" onerror="this.outerHTML='<div class=\\'avatar\\' style=\\'background:${prof.color}\\'>${getInitials(prof.nombre)}</div>'">`
+                    : `<div class="avatar" style="background:${prof.color}">${getInitials(prof.nombre)}</div>`
+                }
                 <div class="card-info">
                     <h3>${prof.nombre}</h3>
                     <p class="career">${prof.carrera}</p>
@@ -665,7 +799,8 @@ function renderCards() {
     });
 }
 
-renderCards();
+// Cargar profes desde Google Sheets al inicio
+loadProfesores();
 
 // Filters
 document.getElementById('searchInput').addEventListener('input', renderCards);
@@ -696,8 +831,15 @@ let currentProf = null;
 
 function openModal(prof) {
     currentProf = prof;
-    document.getElementById('modalAvatar').style.background = prof.color;
-    document.getElementById('modalAvatar').textContent = getInitials(prof.nombre);
+    const modalAv = document.getElementById('modalAvatar');
+    if (prof.foto) {
+        modalAv.innerHTML = `<img src="${prof.foto}" alt="${prof.nombre}" style="width:100%;height:100%;object-fit:cover;border-radius:18px;">`;
+        modalAv.style.background = 'transparent';
+    } else {
+        modalAv.innerHTML = '';
+        modalAv.textContent = getInitials(prof.nombre);
+        modalAv.style.background = prof.color;
+    }
     document.getElementById('modalName').textContent = prof.nombre;
     document.getElementById('modalCareer').textContent = prof.carrera;
     document.getElementById('modalDesc').textContent = prof.descripcion;
