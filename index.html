@@ -120,7 +120,7 @@
         .hero h1 .highlight { background: linear-gradient(135deg, var(--navy-dark), var(--navy-mid), var(--steel)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
         .hero p { font-size: 1.15rem; color: var(--text-muted); max-width: 550px; line-height: 1.7; margin-bottom: 2.5rem; animation: fadeInUp 0.8s ease 0.2s both; }
         .hero-buttons { display: flex; gap: 1rem; animation: fadeInUp 0.8s ease 0.3s both; }
-        .btn { padding: 0.85rem 2rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.3s; border: none; font-family: 'Inter', sans-serif; }
+        .btn { display: inline-block; padding: 0.85rem 2rem; border-radius: 12px; font-size: 0.95rem; font-weight: 600; text-decoration: none; cursor: pointer; transition: all 0.3s; border: none; font-family: 'Inter', sans-serif; }
         .btn-primary { background: var(--navy-dark); color: white; box-shadow: 0 4px 20px rgba(27, 42, 74, 0.3); }
         .btn-primary:hover { background: var(--navy-mid); transform: translateY(-2px); box-shadow: 0 6px 25px rgba(27, 42, 74, 0.4); }
         .btn-secondary { background: white; color: var(--navy-dark); border: 1px solid rgba(27, 42, 74, 0.15); }
@@ -281,6 +281,7 @@
             .cards-grid { grid-template-columns: 1fr; }
             .hero-buttons { flex-direction: column; width: 100%; max-width: 300px; }
             .btn { text-align: center; }
+            .cta-box { padding: 2rem; }
             .filter-row { flex-direction: column; align-items: stretch; }
         }
 
