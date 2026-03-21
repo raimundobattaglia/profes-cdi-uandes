@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profes Particulares | CDI UAndes</title>
+    <title>Profes Particulares | CDI Uandes</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -194,6 +194,16 @@
         .rating-section { margin: 1.5rem 0; padding: 1.2rem; background: rgba(27, 42, 74, 0.03); border-radius: 14px; }
         .rating-section h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 0.8rem; color: var(--text-muted); }
 
+        /* Reviews */
+        .reviews-title { font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.8rem; }
+        .review-item { padding: 0.8rem; background: rgba(27, 42, 74, 0.03); border-radius: 10px; margin-bottom: 0.5rem; }
+        .review-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.3rem; }
+        .review-stars { display: flex; gap: 1px; }
+        .review-stars svg { width: 12px; height: 12px; }
+        .review-date { font-size: 0.7rem; color: var(--text-muted); }
+        .review-comment { font-size: 0.82rem; color: var(--text); line-height: 1.5; }
+        .review-ramo { font-size: 0.72rem; color: var(--navy-mid); font-weight: 500; margin-top: 0.3rem; }
+
         /* Responsive */
         @media (max-width: 768px) {
             .nav-links { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: var(--bg); flex-direction: column; justify-content: center; align-items: center; gap: 2rem; }
@@ -227,30 +237,30 @@
 
     <!-- Nav -->
     <nav>
-        <div class="logo"><img src="CDI.png.webp" alt="CDI UAndes" class="logo-img"> CDI UAndes</div>
+        <div class="logo"><img src="CDI.png.webp" alt="CDI Uandes" class="logo-img"> CDI Uandes</div>
         <ul class="nav-links" id="navLinks">
             <li><a href="#profesores" onclick="closeNav()">Profesores</a></li>
             <li><a href="#como-funciona" onclick="closeNav()">Cómo Funciona</a></li>
-            <li><a href="#" id="btnNavProfe" style="cursor:pointer">Sé Profe</a></li>
+            <li><a href="#" id="btnNavProfe" style="cursor:pointer">Sé Profesor</a></li>
         </ul>
         <div class="hamburger" id="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
     </nav>
 
     <!-- Hero -->
     <section class="hero">
-        <div class="hero-badge"><div class="pulse"></div>Plataforma oficial CDI UAndes</div>
-        <h1>Encuentra tu<br><span class="highlight">profe particular</span></h1>
-        <p>Conectamos alumnos de la UAndes con los mejores profes particulares. Aprueba tus ramos con ayuda de quienes ya los pasaron.</p>
+        <div class="hero-badge"><div class="pulse"></div>Plataforma oficial del CDI 2026</div>
+        <h1>Encuentra tu<br><span class="highlight">profesor particular</span></h1>
+        <p>Conectamos alumnos de Ingenieria con los mejores profesores particulares. Aprueba tus ramos con ayuda de quienes ya los pasaron.</p>
         <div class="hero-buttons">
             <a href="#profesores" class="btn btn-primary">Ver Profesores</a>
-            <a href="#" class="btn btn-secondary" id="btnHeroProfe">Quiero ser profe</a>
+            <a href="#" class="btn btn-secondary" id="btnHeroProfe">Quiero ser profesor</a>
         </div>
         <div class="scroll-indicator"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 13l5 5 5-5M7 6l5 5 5-5"/></svg></div>
     </section>
 
     <!-- Stats -->
     <div class="stats reveal">
-        <div class="stat"><div class="stat-number" id="statProfes">0</div><div class="stat-label">Profes disponibles</div></div>
+        <div class="stat"><div class="stat-number" id="statProfes">0</div><div class="stat-label">Profesores disponibles</div></div>
         <div class="stat"><div class="stat-number" id="statRamos">0</div><div class="stat-label">Ramos cubiertos</div></div>
         <div class="stat"><div class="stat-number" id="statAlumnos">0</div><div class="stat-label">Alumnos ayudados</div></div>
     </div>
@@ -258,8 +268,8 @@
     <!-- Profesores -->
     <section id="profesores">
         <div class="section-header reveal">
-            <h2>Nuestros Profes</h2>
-            <p>Todos son alumnos o egresados de la UAndes</p>
+            <h2>Nuestros Profesores</h2>
+            <p>Todos son alumnos o egresados de la Uandes</p>
         </div>
 
         <div class="search-container reveal">
@@ -303,17 +313,17 @@
             <div class="step">
                 <div class="step-icon" style="background: rgba(27, 42, 74, 0.08);">🔍</div>
                 <h3>Busca tu ramo</h3>
-                <p>Filtra por carrera, semestre o busca directamente el ramo que necesitas reforzar.</p>
+                <p>Filtra por carrera, ramo o busca directamente el profesor que necesitas.</p>
             </div>
             <div class="step">
                 <div class="step-icon" style="background: rgba(61, 90, 128, 0.08);">💬</div>
-                <h3>Contacta al profe</h3>
+                <h3>Contacta al profesor</h3>
                 <p>Escríbele por WhatsApp para coordinar horarios y modalidad de clases.</p>
             </div>
             <div class="step">
                 <div class="step-icon" style="background: rgba(141, 171, 196, 0.15);">🚀</div>
                 <h3>Aprende y aprueba</h3>
-                <p>Clases personalizadas que se adaptan a tu ritmo. Al final, califica a tu profe.</p>
+                <p>Clases personalizadas que se adaptan a tu ritmo. Al final, califica a tu profesor.</p>
             </div>
         </div>
     </section>
@@ -321,17 +331,17 @@
     <!-- CTA -->
     <section class="cta-section" id="unete">
         <div class="cta-box reveal">
-            <h2>¿Quieres ser profe?</h2>
-            <p>Si eres alumno o egresado de la UAndes y quieres compartir tus conocimientos (y ganar algo extra), únete a nuestra red de profes particulares.</p>
-            <a href="#" class="btn btn-primary" id="btnCtaProfe">Postular como Profe</a>
+            <h2>¿Quieres ser profesor?</h2>
+            <p>Si eres alumno o egresado de la Uandes y quieres compartir tus conocimientos (y ganar algo extra), únete a nuestra red de profesores particulares.</p>
+            <a href="#" class="btn btn-primary" id="btnCtaProfe">Postular como Profesor</a>
         </div>
     </section>
 
     <!-- Footer -->
     <footer>
-        <div class="footer-brand"><img src="CDI.png.webp" alt="CDI" class="footer-logo"> CDI UAndes</div>
+        <div class="footer-brand"><img src="CDI.png.webp" alt="CDI" class="footer-logo"> CDI Uandes</div>
         <p>Centro de Alumnos de Ingeniería — Universidad de los Andes</p>
-        <p style="margin-top: 0.5rem;">Hecho con ❤️ por el CDI UAndes &copy; 2026</p>
+        <p style="margin-top: 0.5rem;">Hecho con ❤️ por el CDI Uandes &copy; 2026</p>
     </footer>
 
     <!-- Modal Profe -->
@@ -368,10 +378,13 @@
 
             <!-- Rating info -->
             <div class="rating-section">
-                <h4>📝 ¿Ya tomaste clase con este profe?</h4>
+                <h4>📝 ¿Ya tomaste clase con este profesor?</h4>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem;">Ayuda a otros alumnos compartiendo tu experiencia.</p>
-                <a id="modalEvalBtn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.2rem;border-radius:10px;background:var(--navy-dark);color:white;text-decoration:none;font-size:0.85rem;font-weight:600;transition:all 0.3s;">⭐ Evaluar este profe</a>
+                <a id="modalEvalBtn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.2rem;border-radius:10px;background:var(--navy-dark);color:white;text-decoration:none;font-size:0.85rem;font-weight:600;transition:all 0.3s;">⭐ Evaluar este profesor</a>
             </div>
+
+            <!-- Comentarios de reseñas -->
+            <div id="modalReviews" style="margin-bottom:1.2rem;"></div>
 
             <a id="modalWhatsapp" href="#" target="_blank" class="whatsapp-btn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
@@ -390,6 +403,9 @@
         // CONFIGURACIÓN - Apps Script URL
         // =====================================================
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw22MNkC-lY1TaR9Vinfvd79DjW81g8hqds4HaFFdRAt8LbhM7oGaJyK48mXzznbi4/exec";
+
+        // Cache global de reseñas
+        let allReviews = {};
 
         const EVAL_ENTRY_ID = "1055160712";
     </script>
@@ -689,15 +705,26 @@ async function loadProfesores() {
     try {
         const response = await fetch(APPS_SCRIPT_URL);
         const data = await response.json();
-        if (Array.isArray(data) && data.length > 0) {
+        if (data && data.profesores && data.profesores.length > 0) {
+            profesores = data.profesores.map(mapSheetData).filter(p => p.nombre.length > 0);
+            localStorage.setItem('profes_cdi_cache', JSON.stringify(profesores));
+        } else if (Array.isArray(data) && data.length > 0) {
             profesores = data.map(mapSheetData).filter(p => p.nombre.length > 0);
             localStorage.setItem('profes_cdi_cache', JSON.stringify(profesores));
         } else if (!cached || profesores.length === 0) {
             profesores = profesoresFallback;
         }
+        // Guardar reseñas
+        if (data && data.reviews) {
+            allReviews = data.reviews;
+            localStorage.setItem('profes_cdi_reviews', JSON.stringify(allReviews));
+        }
     } catch (error) {
         console.error('Error cargando profes:', error);
         if (!cached || profesores.length === 0) profesores = profesoresFallback;
+        // Cargar reseñas del cache
+        const cachedReviews = localStorage.getItem('profes_cdi_reviews');
+        if (cachedReviews) try { allReviews = JSON.parse(cachedReviews); } catch(e) {}
     }
 
     renderCards();
@@ -743,8 +770,13 @@ function renderStars(rating) {
     return html;
 }
 
+// Normalizar texto: quita tildes para búsqueda flexible
+function normalize(str) {
+    return str.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+}
+
 function renderCards() {
-    const search = document.getElementById('searchInput').value.toLowerCase();
+    const search = normalize(document.getElementById('searchInput').value);
     const carrera = document.getElementById('filterCarrera').value;
     const ramo = document.getElementById('filterRamo').value;
 
@@ -752,9 +784,9 @@ function renderCards() {
 
     const filtered = profesores.filter(p => {
         const matchSearch = !search ||
-            p.nombre.toLowerCase().includes(search) ||
-            p.carrera.toLowerCase().includes(search) ||
-            p.ramos.some(r => r.toLowerCase().includes(search));
+            normalize(p.nombre).includes(search) ||
+            normalize(p.carrera).includes(search) ||
+            p.ramos.some(r => normalize(r).includes(search));
 
         const matchCarrera = carrera === 'all' ||
             (carrera === 'Plan Común' && p.semestres.some(s => s <= 4)) ||
@@ -846,9 +878,28 @@ function openModal(prof) {
     document.getElementById('modalExp').textContent = prof.experiencia;
     document.getElementById('modalSubjects').innerHTML = prof.ramos.map(r => `<span class="subject-tag">${r}</span>`).join('');
 
-    const msg = encodeURIComponent(`Hola ${prof.nombre}! Te contacto por la página de profes del CDI UAndes. Me interesa tomar clases.`);
+    const msg = encodeURIComponent(`Hola ${prof.nombre}! Te contacto por la página de profes del CDI Uandes. Me interesa tomar clases.`);
     document.getElementById('modalWhatsapp').href = `https://wa.me/${prof.whatsapp}?text=${msg}`;
     document.getElementById('modalEvalBtn').href = getEvalUrl(prof.nombre);
+
+    // Renderizar reseñas
+    const reviewsContainer = document.getElementById('modalReviews');
+    const profReviews = allReviews[prof.nombre] || [];
+    if (profReviews.length > 0) {
+        reviewsContainer.innerHTML = `<p class="reviews-title">💬 Reseñas de alumnos (${profReviews.length})</p>` +
+            profReviews.map(r => `
+                <div class="review-item">
+                    <div class="review-header">
+                        <div class="review-stars">${renderStars(r.rating)}</div>
+                        <span class="review-date">${r.fecha}</span>
+                    </div>
+                    ${r.comentario ? `<p class="review-comment">"${r.comentario}"</p>` : ''}
+                    ${r.ramo ? `<p class="review-ramo">📚 ${r.ramo}</p>` : ''}
+                </div>
+            `).join('');
+    } else {
+        reviewsContainer.innerHTML = '<p style="font-size:0.82rem;color:var(--text-muted);text-align:center;padding:0.8rem;">Aún no hay reseñas para este profesor.</p>';
+    }
 
     document.getElementById('modalOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
