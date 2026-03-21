@@ -369,7 +369,8 @@
             <!-- Rating info -->
             <div class="rating-section">
                 <h4>📝 ¿Ya tomaste clase con este profe?</h4>
-                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem;">Tu profe te compartirá un formulario de evaluación al finalizar la clase.</p>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.8rem;">Ayuda a otros alumnos compartiendo tu experiencia.</p>
+                <a id="modalEvalBtn" href="#" target="_blank" style="display:inline-flex;align-items:center;gap:0.4rem;padding:0.6rem 1.2rem;border-radius:10px;background:var(--navy-dark);color:white;text-decoration:none;font-size:0.85rem;font-weight:600;transition:all 0.3s;">⭐ Evaluar este profe</a>
             </div>
 
             <a id="modalWhatsapp" href="#" target="_blank" class="whatsapp-btn">
@@ -390,9 +391,7 @@
         // =====================================================
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbw22MNkC-lY1TaR9Vinfvd79DjW81g8hqds4HaFFdRAt8LbhM7oGaJyK48mXzznbi4/exec";
 
-        // Entry ID del campo "nombre del profesor" en el form de evaluación
-        // (se obtiene generando un link pre-llenado del form)
-        const EVAL_ENTRY_ID = "PEGAR_ENTRY_ID_AQUI";
+        const EVAL_ENTRY_ID = "1055160712";
     </script>
 
 <script>
@@ -664,8 +663,8 @@ function mapSheetData(row) {
         carrSigla: sigla,
         ramos,
         semestres: semestres.length > 0 ? semestres : [1,2,3,4],
-        rating: 0,
-        reviews: 0,
+        rating: parseFloat(row['_rating']) || 0,
+        reviews: parseInt(row['_reviews']) || 0,
         precio,
         modalidad,
         whatsapp: whatsapp.startsWith('56') ? whatsapp : '56' + whatsapp,
@@ -717,9 +716,6 @@ function updateStats() {
 
 // Generar URL de evaluación pre-llenada para un profesor
 function getEvalUrl(profNombre) {
-    if (EVAL_ENTRY_ID === "PEGAR_ENTRY_ID_AQUI" || !EVAL_ENTRY_ID) {
-        return GOOGLE_FORM_EVALUACION;
-    }
     return GOOGLE_FORM_EVALUACION + '?usp=pp_url&entry.' + EVAL_ENTRY_ID + '=' + encodeURIComponent(profNombre);
 }
 
@@ -852,6 +848,7 @@ function openModal(prof) {
 
     const msg = encodeURIComponent(`Hola ${prof.nombre}! Te contacto por la página de profes del CDI UAndes. Me interesa tomar clases.`);
     document.getElementById('modalWhatsapp').href = `https://wa.me/${prof.whatsapp}?text=${msg}`;
+    document.getElementById('modalEvalBtn').href = getEvalUrl(prof.nombre);
 
     document.getElementById('modalOverlay').classList.add('active');
     document.body.style.overflow = 'hidden';
