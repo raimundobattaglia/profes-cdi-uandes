@@ -175,6 +175,23 @@
         .no-results { text-align: center; padding: 4rem 2rem; color: var(--text-muted); display: none; }
         .no-results svg { width: 64px; height: 64px; margin-bottom: 1rem; opacity: 0.3; }
 
+        /* Loading Indicator */
+        .loading-indicator { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 4rem 2rem; gap: 1.2rem; }
+        .loading-dots { display: flex; gap: 0.5rem; }
+        .loading-dots span { width: 12px; height: 12px; border-radius: 50%; background: var(--navy-mid); animation: loadPulse 1.4s ease-in-out infinite; }
+        .loading-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .loading-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes loadPulse { 0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; } 40% { transform: scale(1); opacity: 1; } }
+        .loading-text { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* Error Banner */
+        .error-banner { display: none; max-width: 1200px; margin: 0 auto 1.5rem; padding: 0.8rem 1.2rem; border-radius: 12px; background: #fef3c7; border: 1px solid #f59e0b; color: #92400e; font-size: 0.85rem; text-align: center; align-items: center; justify-content: center; gap: 0.8rem; }
+        .error-banner.show { display: flex; flex-wrap: wrap; }
+        .error-banner button { background: #f59e0b; color: white; border: none; padding: 0.4rem 1rem; border-radius: 8px; font-size: 0.8rem; font-weight: 600; cursor: pointer; font-family: 'Inter', sans-serif; }
+        .error-banner button:hover { background: #d97706; }
+        html.dark .error-banner { background: rgba(245, 158, 11, 0.15); border-color: rgba(245, 158, 11, 0.3); color: #fbbf24; }
+        html.dark .error-banner button { background: rgba(245, 158, 11, 0.3); }
+
         /* Steps */
         .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
         .step { text-align: center; padding: 2.5rem 2rem; border-radius: 20px; background: white; border: 1px solid rgba(27, 42, 74, 0.08); box-shadow: 0 2px 12px rgba(27, 42, 74, 0.06); transition: all 0.3s; }
@@ -327,6 +344,16 @@
                     <option value="all">Todos los ramos</option>
                 </select>
             </div>
+        </div>
+
+        <div class="error-banner" id="errorBanner">
+            ⚠️ No pudimos cargar los datos actualizados. Mostrando datos previos.
+            <button onclick="location.reload()">Reintentar</button>
+        </div>
+
+        <div id="loadingIndicator" class="loading-indicator">
+            <div class="loading-dots"><span></span><span></span><span></span></div>
+            <p class="loading-text">Cargando profesores...</p>
         </div>
 
         <div class="cards-grid" id="cardsGrid"></div>
@@ -604,6 +631,12 @@ ramosUnicos.forEach(r => {
 // ==========================================
 //   PROFESORES DATA (carga dinámica desde Google Sheets)
 // ==========================================
+// Función de seguridad: escapar HTML para prevenir XSS
+function escapeHTML(str) {
+    if (!str) return '';
+    return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+}
+
 const avatarColors = ["#1b2a4a","#3d5a80","#5a7d9a","#8dabc4","#2c4266","#4a6fa5"];
 
 // Datos de respaldo (se usan si falla la conexión al API)
@@ -717,7 +750,7 @@ function mapSheetData(row) {
         reviews: parseInt(row['_reviews']) || 0,
         precio,
         modalidad,
-        whatsapp: whatsapp.startsWith('56') ? whatsapp : '56' + whatsapp,
+        whatsapp: (() => { let w = whatsapp.replace(/^0+/, ''); if (!w.startsWith('56')) w = '56' + w; return w; })(),
         descripcion: `Estudiante de ${anio} de ${carrera} en la UAndes. ${experiencia}`,
         experiencia: `${anio} · ${carrera}` + (experiencia ? ` · ${experiencia}` : ''),
         color: avatarColors[colorIndex],
@@ -759,6 +792,8 @@ async function loadProfesores() {
         // Cargar reseñas del cache
         const cachedReviews = localStorage.getItem('profes_cdi_reviews');
         if (cachedReviews) try { allReviews = JSON.parse(cachedReviews); } catch(e) {}
+        // Mostrar banner de error
+        document.getElementById('errorBanner').classList.add('show');
     }
 
     renderCards();
@@ -849,16 +884,16 @@ function renderCards() {
         card.innerHTML = `
             <div class="card-top">
                 ${prof.foto
-                    ? `<img src="${prof.foto}" alt="${prof.nombre}" class="avatar" style="object-fit:cover;" onerror="this.outerHTML='<div class=\\'avatar\\' style=\\'background:${prof.color}\\'>${getInitials(prof.nombre)}</div>'">`
-                    : `<div class="avatar" style="background:${prof.color}">${getInitials(prof.nombre)}</div>`
+                    ? `<img src="${prof.foto}" alt="${escapeHTML(prof.nombre)}" class="avatar" style="object-fit:cover;" onerror="this.outerHTML='<div class=\\'avatar\\' style=\\'background:${prof.color}\\'>${escapeHTML(getInitials(prof.nombre))}</div>'">`
+                    : `<div class="avatar" style="background:${prof.color}">${escapeHTML(getInitials(prof.nombre))}</div>`
                 }
                 <div class="card-info">
-                    <h3>${prof.nombre}</h3>
-                    <p class="career">${prof.carrera}</p>
+                    <h3>${escapeHTML(prof.nombre)}</h3>
+                    <p class="career">${escapeHTML(prof.carrera)}</p>
                 </div>
             </div>
-            <p class="card-desc">${prof.descripcion}</p>
-            <div class="card-subjects">${prof.ramos.map(r => `<span class="subject-tag">${r}</span>`).join('')}</div>
+            <p class="card-desc">${escapeHTML(prof.descripcion)}</p>
+            <div class="card-subjects">${prof.ramos.map(r => `<span class="subject-tag">${escapeHTML(r)}</span>`).join('')}</div>
             <div class="card-bottom">
                 <div class="rating">
                     <div class="stars">${renderStars(prof.rating)}</div>
@@ -919,7 +954,7 @@ function openModal(prof) {
     document.getElementById('modalPrice').textContent = prof.precio;
     document.getElementById('modalModality').textContent = prof.modalidad;
     document.getElementById('modalExp').textContent = prof.experiencia;
-    document.getElementById('modalSubjects').innerHTML = prof.ramos.map(r => `<span class="subject-tag">${r}</span>`).join('');
+    document.getElementById('modalSubjects').innerHTML = prof.ramos.map(r => `<span class="subject-tag">${escapeHTML(r)}</span>`).join('');
 
     const msg = encodeURIComponent(`Hola ${prof.nombre}! Te contacto por la página de profes del CDI Uandes. Me interesa tomar clases.`);
     document.getElementById('modalWhatsapp').href = `https://wa.me/${prof.whatsapp}?text=${msg}`;
@@ -936,8 +971,8 @@ function openModal(prof) {
                         <div class="review-stars">${renderStars(r.rating)}</div>
                         <span class="review-date">${r.fecha}</span>
                     </div>
-                    ${r.comentario ? `<p class="review-comment">"${r.comentario}"</p>` : ''}
-                    ${r.ramo ? `<p class="review-ramo">📚 ${r.ramo}</p>` : ''}
+                    ${r.comentario ? `<p class="review-comment">"${escapeHTML(r.comentario)}"</p>` : ''}
+                    ${r.ramo ? `<p class="review-ramo">📚 ${escapeHTML(r.ramo)}</p>` : ''}
                 </div>
             `).join('');
     } else {
