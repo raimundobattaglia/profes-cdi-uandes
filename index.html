@@ -3,7 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profes Particulares | CDI Uandes</title>
+    <title>Profesores Particulares | CDI Uandes</title>
+    <meta name="description" content="Encuentra profesores particulares de Ingeniería en la Universidad de los Andes. Plataforma oficial del CDI 2026.">
+    <meta property="og:title" content="Profesores Particulares | CDI Uandes">
+    <meta property="og:description" content="Conectamos alumnos de Ingeniería con los mejores profesores particulares. Aprueba tus ramos con ayuda de quienes ya los pasaron.">
+    <meta property="og:image" content="CDI.png.webp">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://raimundobattaglia.github.io/profes-cdi-uandes/">
+    <link rel="icon" href="CDI.png.webp" type="image/webp">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -263,6 +270,11 @@
             .filter-row { flex-direction: column; align-items: stretch; }
         }
 
+        /* Hamburger animation */
+        .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active span:nth-child(2) { opacity: 0; }
+        .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+
         .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5, 0, 0, 1); }
         .reveal.visible { opacity: 1; transform: translateY(0); }
     </style>
@@ -342,6 +354,14 @@
                 <label>Ramo</label>
                 <select id="filterRamo">
                     <option value="all">Todos los ramos</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Modalidad</label>
+                <select id="filterModalidad">
+                    <option value="all">Todas</option>
+                    <option value="presencial">Presencial</option>
+                    <option value="online">Online</option>
                 </select>
             </div>
         </div>
@@ -851,6 +871,8 @@ function renderCards() {
 
     grid.innerHTML = '';
 
+    const modalidad = document.getElementById('filterModalidad').value;
+
     const filtered = profesores.filter(p => {
         const matchSearch = !search ||
             normalize(p.nombre).includes(search) ||
@@ -863,9 +885,17 @@ function renderCards() {
 
         const matchRamo = ramo === 'all' || p.ramos.includes(ramo);
 
-        return matchSearch && matchCarrera && matchRamo;
+        const matchModalidad = modalidad === 'all' ||
+            normalize(p.modalidad).includes(modalidad);
+
+        return matchSearch && matchCarrera && matchRamo && matchModalidad;
     });
 
+    if (profesores.length === 0) {
+        noResults.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg><p>Pronto habrán profesores disponibles. ¡Vuelve a revisar!</p>';
+        noResults.style.display = 'block';
+        return;
+    }
     noResults.style.display = filtered.length === 0 ? 'block' : 'none';
 
     // Ordenar: mejor rating primero, sin rating al final
@@ -884,7 +914,7 @@ function renderCards() {
         card.innerHTML = `
             <div class="card-top">
                 ${prof.foto
-                    ? `<img src="${prof.foto}" alt="${escapeHTML(prof.nombre)}" class="avatar" style="object-fit:cover;" onerror="this.outerHTML='<div class=\\'avatar\\' style=\\'background:${prof.color}\\'>${escapeHTML(getInitials(prof.nombre))}</div>'">`
+                    ? `<img src="${prof.foto}" alt="${escapeHTML(prof.nombre)}" class="avatar" loading="lazy" style="object-fit:cover;" onerror="this.outerHTML='<div class=\\'avatar\\' style=\\'background:${prof.color}\\'>${escapeHTML(getInitials(prof.nombre))}</div>'">`
                     : `<div class="avatar" style="background:${prof.color}">${escapeHTML(getInitials(prof.nombre))}</div>`
                 }
                 <div class="card-info">
@@ -929,6 +959,7 @@ document.getElementById('filterCarrera').addEventListener('change', () => {
     renderCards();
 });
 document.getElementById('filterRamo').addEventListener('change', renderCards);
+document.getElementById('filterModalidad').addEventListener('change', renderCards);
 
 // ==========================================
 //   MODAL
@@ -1022,8 +1053,8 @@ function toggleDarkMode() {
     }
 })();
 
-function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
-function closeNav() { document.getElementById('navLinks').classList.remove('open'); }
+function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); document.getElementById('hamburger').classList.toggle('active'); }
+function closeNav() { document.getElementById('navLinks').classList.remove('open'); document.getElementById('hamburger').classList.remove('active'); }
 window.addEventListener('scroll', () => { document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50); });
 
 const observer = new IntersectionObserver(entries => {
