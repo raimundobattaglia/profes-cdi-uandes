@@ -22,6 +22,35 @@
             --gold: #f0a500;
         }
 
+        html.dark {
+            --bg: #0d1b2a;
+            --card-bg: #1b2a4a;
+            --text: #e0e6ed;
+            --text-muted: #8dabc4;
+        }
+        html.dark nav { background: rgba(13, 27, 42, 0.9); border-bottom-color: rgba(141, 171, 196, 0.1); }
+        html.dark nav.scrolled { background: rgba(13, 27, 42, 0.97); box-shadow: 0 2px 20px rgba(0,0,0,0.3); }
+        html.dark .card { background: var(--card-bg); border-color: rgba(141, 171, 196, 0.1); }
+        html.dark .card:hover { border-color: rgba(141, 171, 196, 0.2); box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+        html.dark .step { background: var(--card-bg); border-color: rgba(141, 171, 196, 0.1); }
+        html.dark .search-container input { background: var(--card-bg); border-color: rgba(141, 171, 196, 0.15); color: var(--text); }
+        html.dark .filter-group select { background: var(--card-bg); border-color: rgba(141, 171, 196, 0.15); color: var(--text); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%238dabc4' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 0.6rem center; }
+        html.dark .subject-tag { background: rgba(141, 171, 196, 0.1); color: var(--text-muted); border-color: rgba(141, 171, 196, 0.15); }
+        html.dark .modal { background: #1b2a4a; border-color: rgba(141, 171, 196, 0.15); }
+        html.dark .modal-overlay { background: rgba(0,0,0,0.6); }
+        html.dark .cta-box { background: linear-gradient(135deg, rgba(27, 42, 74, 0.3), rgba(141, 171, 196, 0.1)); border-color: rgba(141, 171, 196, 0.15); }
+        html.dark footer { background: #0d1b2a; border-top-color: rgba(141, 171, 196, 0.1); }
+        html.dark .nav-links { background: var(--bg); }
+        html.dark .hamburger span { background: var(--text); }
+        html.dark .rating-section { background: rgba(141, 171, 196, 0.08); }
+        html.dark .review-item { background: rgba(141, 171, 196, 0.08); }
+        html.dark .card-bottom { border-top-color: rgba(141, 171, 196, 0.1); }
+        html.dark .modal .modal-desc { border-bottom-color: rgba(141, 171, 196, 0.1); }
+        html.dark .star-empty { color: #3d5a80; fill: #3d5a80; }
+        html.dark .bg-animation .circle { opacity: 0.03; }
+        .dark-toggle { background: none; border: none; cursor: pointer; font-size: 1.3rem; padding: 0.3rem; transition: transform 0.3s; line-height: 1; }
+        .dark-toggle:hover { transform: scale(1.15); }
+
         html { scroll-behavior: smooth; }
 
         body {
@@ -243,6 +272,7 @@
             <li><a href="#como-funciona" onclick="closeNav()">Cómo Funciona</a></li>
             <li><a href="#" id="btnNavProfe" style="cursor:pointer">Sé Profesor</a></li>
         </ul>
+        <button class="dark-toggle" id="darkToggle" onclick="toggleDarkMode()" title="Modo oscuro">🌙</button>
         <div class="hamburger" id="hamburger" onclick="toggleNav()"><span></span><span></span><span></span></div>
     </nav>
 
@@ -803,6 +833,15 @@ function renderCards() {
 
     noResults.style.display = filtered.length === 0 ? 'block' : 'none';
 
+    // Ordenar: mejor rating primero, sin rating al final
+    filtered.sort((a, b) => {
+        if (a.rating === 0 && b.rating === 0) return b.reviews - a.reviews;
+        if (a.rating === 0) return 1;
+        if (b.rating === 0) return -1;
+        if (b.rating !== a.rating) return b.rating - a.rating;
+        return b.reviews - a.reviews;
+    });
+
     filtered.forEach((prof, i) => {
         const card = document.createElement('div');
         card.className = 'card';
@@ -932,6 +971,22 @@ document.getElementById('btnNavProfe').addEventListener('click', e => { e.preven
 // ==========================================
 //   NAV & ANIMATIONS
 // ==========================================
+// Dark mode
+function toggleDarkMode() {
+    const isDark = document.documentElement.classList.toggle('dark');
+    document.getElementById('darkToggle').textContent = isDark ? '☀️' : '🌙';
+    localStorage.setItem('darkMode', isDark ? 'dark' : 'light');
+}
+// Init dark mode
+(function() {
+    const saved = localStorage.getItem('darkMode');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (saved === 'dark' || (!saved && prefersDark)) {
+        document.documentElement.classList.add('dark');
+        document.getElementById('darkToggle').textContent = '☀️';
+    }
+})();
+
 function toggleNav() { document.getElementById('navLinks').classList.toggle('open'); }
 function closeNav() { document.getElementById('navLinks').classList.remove('open'); }
 window.addEventListener('scroll', () => { document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 50); });
@@ -956,7 +1011,8 @@ const statsObserver = new IntersectionObserver(entries => {
         if (entry.isIntersecting) {
             animateCounter(document.getElementById('statProfes'), profesores.length, '+');
             animateCounter(document.getElementById('statRamos'), [...new Set(profesores.flatMap(p => p.ramos))].length, '+');
-            animateCounter(document.getElementById('statAlumnos'), 150, '+');
+            const totalReviews = Object.values(allReviews).reduce((sum, arr) => sum + arr.length, 0);
+            animateCounter(document.getElementById('statAlumnos'), totalReviews || 0, '+');
             statsObserver.disconnect();
         }
     });
